@@ -14,7 +14,7 @@ and works in plain HTML, React, Next.js and anything else that renders HTML.
 
 By [DiMaac](https://dimaac.com). Free, MIT licensed.
 
-**Docs with live examples: [dimaac.com/tween](https://dimaac.com/tween)**
+**Docs with live examples: [tweenwind.dimaac.com](https://tweenwind.dimaac.com)**
 
 ## Install
 
