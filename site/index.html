@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tweenwind by DiMaac. GSAP animations, written as class names</title>
+<meta name="description" content="Add a class and the element animates when it scrolls into view. Pinned scenes, split text, horizontal scroll and image sequences, with no JavaScript to write. Free and open source.">
+<meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="Tweenwind by DiMaac">
+<meta property="og:description" content="GSAP animations, written as class names. Free and open source.">
+<meta property="og:type" content="website">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+
+<!-- The theme the visitor picked on any DiMaac site, before the first paint -->
+<script>
+(function(){try{var d=document.documentElement,m=document.cookie.match(/(?:^|;\s*)dm_theme=(light|dark)(?:;|$)/),t=m?m[1]:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");d.dataset.theme=t;d.style.colorScheme=t}catch(e){}})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="site.css">
+
+<!-- The library. In the head, without defer, so nothing flashes before it animates in. -->
+<script src="tweenwind.min.js"></script>
+<script>
+  // The one thing on this page that classes alone cannot say: two tweens with different
+  // timings on the same words. A preset names it, and then it is a class like any other.
+  gs.preset("glow", {
+    natural: true,
+    build(timeline, words) {
+      timeline.from(words, { opacity: 0, duration: 0.45, stagger: 0.045 }, 0);
+      timeline.from(
+        words,
+        {
+          color: "transparent",
+          textShadow: (index) => `0 0 8px hsl(${180 + index * 15}, 100%, 60%)`,
+          duration: 1.05,
+          ease: "power2.in",
+          stagger: 0.045,
+        },
+        0,
+      );
+    },
+  });
+</script>
+</head>
+<body>
+
+<div class="progress gs-from-[scaleX:0] gs-scrub-true gs-ease-none gs-trigger-[body] gs-start-[top_top] gs-end-[bottom_bottom]" aria-hidden="true"></div>
+
+<div class="site-nav-bar">
+  <header class="wrap site-nav">
+    <a href="https://dimaac.com" class="brand" aria-label="DiMaac home">
+      <span class="logo">
+        <svg class="logo-mark" viewBox="0 0 75 111" height="34" width="23" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M42.3447 55.2821V102.404L31.8417 110.282H30.3447V55.2821A7.5 7.5 0 0 0 42.3447 55.2821ZM8.3661 8.94717C9.37902 2.10251 16.8316 -2.10005 23.2694 1.08097L23.911 1.42374L25.8446 2.55753C35.5377 8.31711 45.4047 15.3513 53.6034 22.8603C62.1498 30.6882 69.7215 39.7797 72.6288 49.1103C74.136 53.9493 74.4864 59.1978 72.6903 64.3416C70.8867 69.5049 67.2099 73.7292 62.1726 77.0301C57.5103 80.0856 51.4284 82.5183 43.8447 84.3399V68.8182C48.2679 67.5225 51.5724 66.0447 53.952 64.4853C56.8683 62.5743 58.0452 60.7869 58.5312 59.3964C59.0232 57.9861 59.1009 56.1291 58.3056 53.5752C56.6052 48.1173 51.456 41.2377 43.4697 33.9228C37.3743 28.3403 30.0984 22.9315 22.6395 18.1933L18.1513 72.8319C22.0425 72.5685 25.5978 72.2133 28.8417 71.7948V86.9151C24.2037 87.4587 19.1872 87.8637 13.7802 88.1103C7.74687 88.3848 2.23938 83.3451 2.77625 76.7871L8.28699 9.63858L8.3661 8.94717Z"/>
+          <circle class="logo-dot" cx="36.3447" cy="46.2821" r="6" fill="currentColor"/>
+        </svg>
+        <span class="logo-name">DiMaac</span>
+      </span>
+    </a>
+    <div class="nav-end">
+      <nav aria-label="On this page" class="nav-wide">
+        <a class="g gs-scroll-to" href="#start">Start</a>
+        <a class="g gs-scroll-to" href="#reveal">Reveal</a>
+        <a class="g gs-scroll-to" href="#text">Text</a>
+        <a class="g gs-scroll-to" href="#scroll">Scroll</a>
+        <a class="g gs-scroll-to" href="#react">React</a>
+        <a class="g gs-scroll-to nav-keep" href="#classes">All classes</a>
+        <a class="g nav-keep" href="https://github.com/Hank-D-Tank/tweenwind" target="_blank" rel="noreferrer">GitHub</a>
+      </nav>
+      <button type="button" class="dm-theme-toggle nav-theme" aria-label="Switch colour theme" title="Switch colour theme">
+        <svg class="dm-theme-icon dm-theme-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>
+        <svg class="dm-theme-icon dm-theme-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.2 8.2 0 1 0 10.2 10.2Z"/></svg>
+      </button>
+    </div>
+  </header>
+</div>
+
+<main>
+
+<div class="wrap hero">
+  <p class="hero-name load:gs-fade">Tweenwind</p>
+  <h1 class="hero-title load:gs-split-words load:gs-glow">GSAP animations, written as class names.</h1>
+  <p class="hero-lede load:gs-fade-up load:gs-delay-0.5">Add a class and the element animates when it scrolls into view. Add a few more for pinned scenes, split text and timelines tied to the scrollbar. There is no JavaScript to write, and it is free.</p>
+  <p class="hero-links load:gs-fade-up load:gs-delay-0.6">
+    <a class="arrow-link gs-scroll-to" href="#start">Get started <span aria-hidden="true">→</span></a>
+    <a class="arrow-link" href="https://github.com/Hank-D-Tank/tweenwind" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+    <a class="arrow-link" href="https://www.npmjs.com/package/tweenwind" target="_blank" rel="noreferrer">npm <span aria-hidden="true">↗</span></a>
+  </p>
+</div>
+
+<div class="wrap load:gs-fade-up load:gs-delay-0.75" style="padding-bottom: var(--section-end)">
+  <div data-playground>
+    <script type="text/html">
+      <h3 class="gs-split-words gs-fade-up">
+        Change a class and watch
+      </h3>
+      <p class="gs-fade-up gs-delay-0.5">
+        Try gs-blur-in, gs-flip-up or gs-zoom-in.
+      </p>
+      <div class="row gs-zoom-in gs-stagger-0.08">
+        <i class="tile"></i>
+        <i class="tile"></i>
+        <i class="tile"></i>
+        <i class="tile"></i>
+      </div>
+    </script>
+  </div>
+</div>
+
+<!-- ============ a whole site ============ -->
+
+<section class="wrap" id="example">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2 class="section-title">A whole site</h2>
+      <p class="section-note">No JavaScript was written for it.</p>
+    </div>
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-fade-up">A portfolio made of class names.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1">A loader whose digits roll to 100, a name that rises out of its masks, images that wipe in, a pinned process and an archive that slides sideways. Open it and view its source: one script tag, and classes.</p>
+      </div>
+      <a class="showcase gs-reveal-up" href="examples/portfolio/" target="_blank" rel="noreferrer">
+        <img src="assets/portfolio.jpg" alt="The example portfolio: a short introduction at the top of a white page and a very large name along the bottom" width="1440" height="900" loading="lazy">
+      </a>
+      <p class="showcase-link gs-fade-up">
+        <a class="arrow-link" href="examples/portfolio/" target="_blank" rel="noreferrer">Open the example <span aria-hidden="true">↗</span></a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ start ============ -->
+
+<section class="wrap" id="start">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2 class="section-title">Start</h2>
+      <p class="section-note">One line. GSAP is loaded for you.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-fade-up">Add the script, then add classes.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1">It finds every <code>gs-</code> class on the page, loads GSAP and only the plugins those classes need, and keeps watching for elements you add later. It works in plain HTML and in any framework.</p>
+      </div>
+      <div data-tabs class="gs-fade-up">
+        <script type="text/plain" data-panel="Script tag" data-lang="html" data-note="Put it in the head, without defer. That way everything that animates in is hidden before the first paint, so nothing flashes.">
+<!-- In the <head> -->
+<script src="https://cdn.jsdelivr.net/npm/tweenwind"><\/script>
+
+<!-- Anywhere in the page -->
+<h1 class="gs-fade-up">Hello</h1>
+        </script>
+        <script type="text/plain" data-panel="npm" data-lang="js" data-note="Run it once, in the browser. The stylesheet keeps server-rendered pages from flashing before the script starts.">
+// npm install tweenwind gsap
+
+import "tweenwind/auto";
+import "tweenwind/css";
+        </script>
+        <script type="text/plain" data-panel="React and Next.js" data-lang="js" data-note="Render it once, anywhere. Classes then work in every component, server or client, with no hooks and no refs.">
+// app/layout.jsx
+import { Gs } from "tweenwind/react";
+import "tweenwind/css";
+
+export default function Layout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <Gs />
+        {children}
+      </body>
+    </html>
+  );
+}
+
+// Any component
+<h1 className="gs-fade-up">Hello</h1>
+        </script>
+      </div>
+    </div>
+
+    <div class="block">
+      <ul class="notes gs-stagger-0.06">
+        <li><strong>No flash</strong>Elements that animate in are hidden before the first paint. If the script never arrives, they show after three seconds. A menu that opens on a click stays closed.</li>
+        <li><strong>Nothing left behind</strong>When a reveal finishes, the element goes back to plain HTML. No stray inline styles, no split spans. A reveal that has played stays played, also after a resize.</li>
+        <li><strong>Loads what it needs</strong>ScrollTrigger, SplitText and the rest are fetched the first time a class asks for them.</li>
+        <li><strong>Watches the page</strong>Elements added later animate too. Removed ones are cleaned up, also in React. What sits in a closed tab or dialog animates when it is shown.</li>
+        <li><strong>Respects less motion</strong>Visitors who ask for reduced motion get the finished page without the movement. What still waits for the scroll stays within reach of the Tab key and screen readers.</li>
+        <li><strong>Tells you about typos</strong>Write <code>gs-fad-up</code> on localhost and the console asks if you meant <code>gs-fade-up</code>.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ reveal ============ -->
+
+<section class="wrap" id="reveal">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2 class="section-title">Reveal</h2>
+      <p class="section-note">Click a card to play it again.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-fade-up">One class, one animation.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1">Each one plays when the element scrolls into view, once. Add a number to change the amount: <code>gs-fade-up-80</code> travels 80 pixels and <code>gs-zoom-in-0.5</code> starts at half size.</p>
+      </div>
+      <div class="presets" data-presets="fade,fade-up,fade-down,fade-left,fade-right,zoom-in,zoom-out,pop,blur-in,rotate-in,flip-up,flip-down,flip-left,flip-right,slide-up,slide-left,reveal-up,reveal-down,reveal-left,reveal-right"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-fade-up">Your own values.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1">Inside the brackets is what you would pass to <code>gsap.from()</code> or <code>gsap.to()</code>. Any property, any GSAP setting. Use <code>_</code> where you need a space.</p>
+      </div>
+      <div class="ex">
+        <script type="text/html">
+          <i class="tile wide
+                    gs-from-[x:-140,rotate:-14,opacity:0]
+                    gs-duration-1.2
+                    gs-ease-back.out(1.7)"></i>
+        </script>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="ex" data-note="A loop only runs while it is on screen. gs-float, gs-spin, gs-pulse and gs-wiggle are ready-made ones.">
+        <script type="text/html">
+          <i class="tile
+                    gs-to-[y:-28,rotate:90,borderRadius:50%]
+                    gs-duration-1 gs-ease-power2.inOut
+                    gs-repeat gs-yoyo"></i>
+        </script>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-fade-up">One after another.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1">Put <code>gs-stagger</code> on the parent and its children take turns. Each child waits until it scrolls into view, so a long grid animates row by row instead of all at once off screen.</p>
+      </div>
+      <div class="ex">
+        <script type="text/html">
+          <div class="grid gs-zoom-in gs-stagger-0.05">
+            <i class="tile"></i><i class="tile"></i><i class="tile"></i><i class="tile"></i>
+            <i class="tile"></i><i class="tile"></i><i class="tile"></i><i class="tile"></i>
+            <i class="tile"></i><i class="tile"></i><i class="tile"></i><i class="tile"></i>
+          </div>
+        </script>
+        <script type="text/html" data-code>
+          <div class="grid gs-zoom-in gs-stagger-0.05">
+            <i class="tile"></i>
+            <i class="tile"></i>
+            <i class="tile"></i>
+            <!-- nine more -->
+          </div>
+        </script>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ text ============ -->
+
+<section class="wrap" id="text">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2 class="section-title">Text</h2>
+      <p class="section-note">Split by line, word or letter.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-split-lines gs-mask gs-slide-up">Lines that rise into place.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1">The text is split where it really wraps, and split again if the width changes. Screen readers still get the whole sentence. When the animation ends, the heading is plain text again.</p>
+      </div>
+      <div class="ex">
+        <script type="text/html">
+          <h3 class="gs-split-lines gs-mask gs-slide-up
+                     gs-duration-1">
+            Lines that rise into place, however the text wraps
+          </h3>
+        </script>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="ex">
+        <script type="text/html">
+          <h3 class="gs-split-chars gs-fade-up gs-stagger-0.02">
+            Letter by letter
+          </h3>
+          <p class="gs-split-words gs-blur-in gs-delay-0.4">
+            Or word by word, with any animation you like.
+          </p>
+        </script>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-fade-up">Numbers and effects.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1"><code>gs-count</code> counts up to the number already in the text and keeps its commas, decimals and units. <code>gs-odometer</code> rolls every digit into place in its own mask, and <code>gs-odometer-steps</code> makes it stop and rest on the way, like a page loader. <code>gs-scramble</code> and <code>gs-type</code> do what they say.</p>
+      </div>
+      <div class="ex">
+        <script type="text/html">
+          <div class="stats">
+            <p class="big gs-count">12,480</p>
+            <p class="big gs-odometer-steps-3">2,600</p>
+          </div>
+          <p class="gs-scramble gs-delay-0.3">
+            Scrambled, then readable.
+          </p>
+          <p class="gs-type gs-delay-1.2">
+            And this line types itself out.
+          </p>
+        </script>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ scroll ============ -->
+
+<section id="scroll">
+  <div class="wrap">
+    <div class="section-inner" style="padding-bottom: 0">
+      <div class="section-head">
+        <h2 class="section-title">Scroll</h2>
+        <p class="section-note">Everything below is running on this page.</p>
+      </div>
+
+      <div class="block">
+        <div class="block-head">
+          <h3 class="block-title gs-fade-up">Tie it to the scrollbar.</h3>
+          <p class="block-text gs-fade-up gs-delay-0.1">Add <code>gs-scrub</code> and the animation follows the scroll instead of the clock, from the moment the element enters the screen until it leaves. Scroll this page a little.</p>
+        </div>
+        <div class="ex">
+          <script type="text/html">
+            <i class="tile
+                      gs-from-[x:-130]
+                      gs-to-[x:130,rotate:180]
+                      gs-scrub"></i>
+          </script>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-head">
+          <h3 class="block-title gs-fade-up">Parallax.</h3>
+          <p class="block-text gs-fade-up gs-delay-0.1">One class on an image. It drifts inside its frame as you scroll, and it is zoomed just enough that an edge never shows. A bigger number drifts further.</p>
+        </div>
+        <div class="drift">
+          <figure><img class="gs-parallax-10" src="assets/dunes.webp" alt="Golden dunes under a pale green sky"></figure>
+          <figure><img class="gs-parallax-22" src="assets/pool.webp" alt="Two palm trees beside a pool house in the mist"></figure>
+          <figure><img class="gs-parallax-10" src="assets/shallows.webp" alt="Turquoise shallows seen from above"></figure>
+        </div>
+        <pre class="code pane" data-lang="html">
+&lt;figure&gt;
+  &lt;img class="gs-parallax-22" src="pool.webp" alt="..."&gt;
+&lt;/figure&gt;
+        </pre>
+      </div>
+
+      <div class="block scene-intro">
+        <div class="block-head">
+          <h3 class="block-title gs-fade-up">A pinned scene.</h3>
+          <p class="block-text gs-fade-up gs-delay-0.1"><code>gs-timeline</code> turns a section into a sequence: every animated element inside becomes a step, in page order. Add <code>gs-pin</code> and <code>gs-scrub</code> and the section stays put while you scroll through the steps.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="scene gs-timeline gs-pin-300 gs-scrub gs-ease-none" aria-label="A pinned scene">
+    <div class="scene-photo gs-from-[scale:0.5,borderRadius:32px]">
+      <img src="assets/alpine.webp" alt="Snowy peaks under a pink dawn sky">
+      <div class="scene-shade gs-fade gs-with"></div>
+    </div>
+    <div class="scene-lines">
+      <p class="gs-fade-up">Pin a section.</p>
+      <p class="gs-fade-up">Scrub a timeline.</p>
+      <p class="gs-fade-up">Write no JavaScript.</p>
+    </div>
+  </section>
+
+  <div class="wrap after-scene">
+    <pre class="code pane" data-lang="html">
+&lt;section class="gs-timeline gs-pin-300 gs-scrub"&gt;
+  &lt;div class="photo gs-from-[scale:0.5,borderRadius:32px]"&gt;
+    &lt;img src="alpine.webp" alt="..."&gt;
+  &lt;/div&gt;
+  &lt;p class="gs-fade-up"&gt;Pin a section.&lt;/p&gt;
+  &lt;p class="gs-fade-up"&gt;Scrub a timeline.&lt;/p&gt;
+  &lt;p class="gs-fade-up"&gt;Write no JavaScript.&lt;/p&gt;
+&lt;/section&gt;
+    </pre>
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-fade-up">Sideways.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1"><code>gs-horizontal</code> pins a section and slides its first child across for as long as it overflows. Things inside still reveal as they come into view, and <code>gs-snap</code> settles on each panel.</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="reel gs-horizontal gs-snap" aria-label="A sideways section">
+    <div class="reel-track">
+      <article class="reel-panel">
+        <figure><img src="assets/dunes.webp" alt="Golden dunes under a pale green sky"></figure>
+        <div class="reel-text">
+          <h3 class="gs-fade-up">One class turns the page sideways.</h3>
+          <p class="gs-fade-up gs-delay-0.1">The section is pinned and the row slides for exactly as far as it overflows.</p>
+        </div>
+      </article>
+      <article class="reel-panel">
+        <figure><img src="assets/red-room.webp" alt="A red tiled room opening onto a bright living space"></figure>
+        <div class="reel-text">
+          <h3 class="gs-fade-up">Reveals still work in here.</h3>
+          <p class="gs-fade-up gs-delay-0.1">This text waited for its panel to slide into view, like it would anywhere else.</p>
+        </div>
+      </article>
+      <article class="reel-panel">
+        <figure><img src="assets/tree.webp" alt="A lone green tree on an orange dune"></figure>
+        <div class="reel-text">
+          <h3 class="gs-fade-up">It settles on a panel.</h3>
+          <p class="gs-fade-up gs-delay-0.1">That is the snap class. Then the row ends and the page scrolls on.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div class="wrap after-scene">
+    <pre class="code pane" data-lang="html">
+&lt;section class="gs-horizontal gs-snap"&gt;
+  &lt;div class="row"&gt;
+    &lt;article&gt;
+      &lt;img src="dunes.webp" alt="..."&gt;
+      &lt;h3 class="gs-fade-up"&gt;One class turns the page sideways.&lt;/h3&gt;
+    &lt;/article&gt;
+    &lt;article&gt;...&lt;/article&gt;
+    &lt;article&gt;...&lt;/article&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+    </pre>
+  </div>
+
+  <section class="turn gs-timeline gs-pin-200 gs-scrub" aria-label="An image sequence">
+    <div class="turn-plate">
+      <canvas class="gs-frames" data-gs-frames="assets/stone/stone-[001-060].webp" role="img" aria-label="A piece of gold ore turning around"></canvas>
+    </div>
+    <div class="reel-text">
+      <h3>An image sequence, scrubbed.</h3>
+      <p><code>gs-frames</code> draws a numbered set of images on a canvas. It loads them a few at a time once the canvas is near the screen, and sizes the canvas for sharp screens.</p>
+    </div>
+  </section>
+
+  <div class="wrap after-scene">
+    <pre class="code pane" data-lang="html">
+&lt;section class="gs-timeline gs-pin-200 gs-scrub"&gt;
+  &lt;canvas class="gs-frames"
+          data-gs-frames="stone/stone-[001-060].webp"&gt;&lt;/canvas&gt;
+&lt;/section&gt;
+    </pre>
+
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-fade-up">Reading speed.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1">Split text and scrub work together. These words fill in as they pass the middle of the screen.</p>
+      </div>
+      <p class="reading gs-split-words gs-from-[opacity:0.14] gs-ease-none gs-duration-0.4 gs-stagger-0.25 gs-scrub gs-start-[top_82%] gs-end-[bottom_52%]">Words can fill in as you read them, tied to the scrollbar instead of a clock, with one line of classes.</p>
+      <pre class="code pane" data-lang="html">
+&lt;p class="gs-split-words gs-from-[opacity:0.14] gs-stagger-0.25
+          gs-scrub gs-start-[top_82%] gs-end-[bottom_52%]"&gt;
+  Words can fill in as you read them...
+&lt;/p&gt;
+      </pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============ interactions ============ -->
+
+<section class="wrap" id="hover">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2 class="section-title">Hover, press and click</h2>
+      <p class="section-note">A prefix says when.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-fade-up">Put the moment in front.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1"><code>hover:</code>, <code>press:</code>, <code>focus:</code> and <code>click:</code> play the animation on that moment and run it backwards when it ends. <code>group-hover:</code> listens to the nearest <code>gs-group</code> instead.</p>
+      </div>
+      <div class="ex">
+        <script type="text/html">
+          <a class="card gs-group">
+            <span class="photo">
+              <img class="group-hover:gs-to-[scale:1.12]
+                          group-hover:gs-duration-0.7"
+                   src="assets/tree.webp" alt="">
+            </span>
+            <span class="group-hover:gs-to-[x:8]">
+              Hover the card
+            </span>
+          </a>
+        </script>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="ex" data-note="gs-magnetic leans toward the pointer. gs-tilt turns a card in 3D. Both stay still on touch screens.">
+        <script type="text/html">
+          <div class="row">
+            <button class="button gs-magnetic
+                           press:gs-to-[scale:0.94]">
+              Magnetic
+            </button>
+            <button class="button ghost
+                           hover:gs-to-[y:-4]
+                           press:gs-to-[scale:0.94]">
+              Lift and press
+            </button>
+          </div>
+        </script>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-fade-up">Open and close.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1">A click plays forward, the next click plays back. Point <code>gs-trigger</code> at the button, and <code>aria-expanded</code> on it is kept up to date. Escape closes it, and with <code>gs-outside</code> so does a click anywhere else. With <code>gs-timeline</code>, the links come in one after another.</p>
+      </div>
+      <div class="ex" data-height="380">
+        <script type="text/html">
+          <button id="menu-button" class="button ghost"
+                  aria-expanded="false">
+            Menu
+          </button>
+          <nav class="menu click:gs-timeline click:gs-fade
+                      click:gs-trigger-[#menu-button]
+                      click:gs-outside
+                      click:gs-duration-0.25">
+            <a class="gs-fade-up gs-at-[-=0.1]">Work</a>
+            <a class="gs-fade-up gs-at-[-=0.15]">About</a>
+            <a class="gs-fade-up gs-at-[-=0.15]">Contact</a>
+          </nav>
+        </script>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-fade-up">A row that never ends.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1"><code>gs-marquee</code> copies the items until they fill the width and loops them without a seam. It can pause under the pointer and speed up with the scroll.</p>
+      </div>
+      <div class="ex" data-layout="stack" data-height="200">
+        <script type="text/html">
+          <div class="marquee gs-marquee
+                      gs-marquee-pause gs-marquee-scroll">
+            <span>No JavaScript to write</span>
+            <span>Powered by GSAP</span>
+            <span>Free and open source</span>
+          </div>
+        </script>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="ex" data-note="gs-draw draws SVG strokes. On an svg element it draws every shape inside, one after another.">
+        <script type="text/html">
+          <svg class="mark gs-draw gs-duration-2" viewBox="-2 -4 79 118"
+               fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M42.3447 55.2821V102.404L31.8417 110.282H30.3447V55.2821A7.5 7.5 0 0 0 42.3447 55.2821ZM8.3661 8.94717C9.37902 2.10251 16.8316 -2.10005 23.2694 1.08097L23.911 1.42374L25.8446 2.55753C35.5377 8.31711 45.4047 15.3513 53.6034 22.8603C62.1498 30.6882 69.7215 39.7797 72.6288 49.1103C74.136 53.9493 74.4864 59.1978 72.6903 64.3416C70.8867 69.5049 67.2099 73.7292 62.1726 77.0301C57.5103 80.0856 51.4284 82.5183 43.8447 84.3399V68.8182C48.2679 67.5225 51.5724 66.0447 53.952 64.4853C56.8683 62.5743 58.0452 60.7869 58.5312 59.3964C59.0232 57.9861 59.1009 56.1291 58.3056 53.5752C56.6052 48.1173 51.456 41.2377 43.4697 33.9228C37.3743 28.3403 30.0984 22.9315 22.6395 18.1933L18.1513 72.8319C22.0425 72.5685 25.5978 72.2133 28.8417 71.7948V86.9151C24.2037 87.4587 19.1872 87.8637 13.7802 88.1103C7.74687 88.3848 2.23938 83.3451 2.77625 76.7871L8.28699 9.63858L8.3661 8.94717Z"/>
+            <circle cx="36.3447" cy="46.2821" r="6"/>
+          </svg>
+        </script>
+        <script type="text/html" data-code>
+          <svg class="gs-draw gs-duration-2" viewBox="0 0 75 111"
+               fill="none" stroke="currentColor">
+            <path d="..."/>
+            <circle cx="36" cy="46" r="6"/>
+          </svg>
+        </script>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ responsive ============ -->
+
+<section class="wrap" id="responsive">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2 class="section-title">Screen sizes and less motion</h2>
+      <p class="section-note">The same prefixes as Tailwind.</p>
+    </div>
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-fade-up">Different on a phone.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1">A class behind <code>md:</code> applies from 768 pixels up and replaces the plain one. <code>max-md:</code> applies below. <code>gs-off</code> switches an element's animations off. Resize the window and it rebuilds itself.</p>
+      </div>
+      <pre class="code pane" data-lang="html">
+&lt;!-- From below on phones, from the right on wider screens --&gt;
+&lt;div class="gs-fade-up md:gs-fade-left"&gt;
+
+&lt;!-- No parallax on small screens --&gt;
+&lt;img class="gs-parallax max-md:gs-off"&gt;
+
+&lt;!-- A longer pin on desktop --&gt;
+&lt;section class="gs-timeline gs-scrub gs-pin-150 lg:gs-pin-300"&gt;
+
+&lt;!-- A gentler version for visitors who ask for less motion --&gt;
+&lt;h2 class="gs-flip-up motion-reduce:gs-fade"&gt;
+      </pre>
+    </div>
+    <div class="block">
+      <ul class="notes gs-stagger-0.06">
+        <li><strong>Reveals and loops</strong>With reduced motion on, they do not run. The element simply shows in its final state, and a count or an odometer is simply the number.</li>
+        <li><strong>Scrubbed animations</strong>They stay, because the visitor is the one moving them, but without the smoothing. Parallax, marquees and magnets are switched off.</li>
+        <li><strong>Your call</strong>Add <code>gs-motion-ok</code> to keep one anyway, or a <code>motion-reduce:</code> class to give it a calmer version.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ react ============ -->
+
+<section class="wrap" id="react">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2 class="section-title">React and Next.js</h2>
+      <p class="section-note">No hooks, no refs, no cleanup code.</p>
+    </div>
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-fade-up">Classes in JSX.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1">Render <code>&lt;Gs /&gt;</code> once and write <code>className</code> as usual. It starts after hydration, so there is no mismatch, and it follows the page as React adds, changes and removes elements.</p>
+      </div>
+      <pre class="code pane" data-lang="js">
+// A server component. Nothing here runs on the client except the classes.
+export default function Features({ items }) {
+  return (
+    &lt;section className="gs-timeline gs-pin-200 gs-scrub"&gt;
+      &lt;h2 className="gs-split-lines gs-mask gs-slide-up"&gt;What you get&lt;/h2&gt;
+      &lt;ul className="gs-fade-up gs-stagger-0.1"&gt;
+        {items.map((item) =&gt; &lt;li key={item}&gt;{item}&lt;/li&gt;)}
+      &lt;/ul&gt;
+    &lt;/section&gt;
+  );
+}
+      </pre>
+    </div>
+    <div class="block">
+      <ul class="notes gs-stagger-0.06">
+        <li><strong>Page changes</strong>Animations on the old page are removed with it, pinned sections included. React normally throws when it removes a pinned element. Here it does not.</li>
+        <li><strong>Lists and state</strong>Items added to a staggered list animate in. Text that changes inside a split heading is split again.</li>
+        <li><strong>Strict mode and hydration</strong>Each animation is made once, after hydration. With the stylesheet imported, server-rendered pages do not flash.</li>
+        <li><strong>A scope, if you want one</strong>Wrap a part in <code>&lt;Gs&gt;...&lt;/Gs&gt;</code> and its animations are removed the instant React unmounts it.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ reference ============ -->
+
+<section class="wrap" id="classes">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2 class="section-title">All classes</h2>
+      <p class="section-note">Every one also works in <code>data-gs</code>, without the prefix.</p>
+    </div>
+
+    <div class="ref-grid">
+      <table class="ref">
+        <caption>What moves</caption>
+        <tr><th>gs-fade-up</th><td>A ready-made reveal. The cards above show twenty of them. <code>gs-fade-in</code>, <code>gs-slide-down</code> and <code>gs-slide-right</code> work the same way.</td></tr>
+        <tr><th>gs-fade-up-80</th><td>The same, with your own amount.</td></tr>
+        <tr><th>gs-float gs-spin gs-pulse gs-wiggle</th><td>Loops that run while the element is on screen.</td></tr>
+        <tr><th>gs-from-[y:50,opacity:0]</th><td>Start from these values and end as the page looks.</td></tr>
+        <tr><th>gs-to-[x:200,rotate:90]</th><td>Start as the page looks and end on these values.</td></tr>
+        <tr><th>gs-from-y-50 gs-to-x-200</th><td>The short form, one value at a time.</td></tr>
+      </table>
+
+      <table class="ref">
+        <caption>How long, how fast</caption>
+        <tr><th>gs-duration-1.2</th><td>Seconds, like GSAP. <code>500ms</code> and <code>500</code> also work.</td></tr>
+        <tr><th>gs-delay-0.3</th><td>Wait before starting.</td></tr>
+        <tr><th>gs-ease-power3.out</th><td>Any GSAP ease. <code>gs-ease-[0.7,0,0.3,1]</code> takes a cubic-bezier.</td></tr>
+        <tr><th>gs-repeat-2 gs-repeat</th><td>Repeat a number of times, or forever.</td></tr>
+        <tr><th>gs-yoyo</th><td>Go back and forth when repeating.</td></tr>
+        <tr><th>gs-repeat-delay-0.5</th><td>Pause between repeats.</td></tr>
+      </table>
+
+      <table class="ref">
+        <caption>Which elements</caption>
+        <tr><th>gs-stagger-0.1</th><td>Animate the children, this far apart.</td></tr>
+        <tr><th>gs-stagger-center</th><td>Start from the <code>center</code>, the <code>end</code>, the <code>edges</code> or at <code>random</code>. From the center or the edges the whole wave takes as long as it would from the start, so neighbours are twice as far apart.</td></tr>
+        <tr><th>gs-children</th><td>Animate the children with the default gap.</td></tr>
+        <tr><th>gs-target-[.dot]</th><td>Animate the elements inside that match.</td></tr>
+        <tr><th>gs-split-lines</th><td>Split the text. Also <code>words</code> and <code>chars</code>.</td></tr>
+        <tr><th>gs-mask</th><td>Clip each split piece, so it rises out of nowhere.</td></tr>
+      </table>
+
+      <table class="ref">
+        <caption>When</caption>
+        <tr><th>(nothing)</th><td>When it scrolls into view, once.</td></tr>
+        <tr><th>gs-replay</th><td>Again every time you scroll down to it. It resets once it is back below the screen.</td></tr>
+        <tr><th>gs-reverse</th><td>Run backwards when you scroll back up past it.</td></tr>
+        <tr><th>gs-start-[top_70%]</th><td>Where it begins. One word works too: <code>gs-start-center</code>.</td></tr>
+        <tr><th>gs-trigger-[#hero]</th><td>Let another element decide when. With <code>click:</code> it names the buttons, and several may match.</td></tr>
+        <tr><th>click:gs-outside</th><td>A click anywhere else closes it, and so does Escape.</td></tr>
+        <tr><th>load:</th><td>As soon as the page is ready.</td></tr>
+        <tr><th>hover: press: focus: click:</th><td>On that moment, and back when it ends.</td></tr>
+        <tr><th>group-hover:</th><td>When the nearest <code>gs-group</code> is hovered.</td></tr>
+      </table>
+
+      <table class="ref">
+        <caption>Scroll</caption>
+        <tr><th>gs-scrub</th><td>Follow the scrollbar, evenly unless you add an ease. <code>gs-scrub-1</code> sets the smoothing, <code>gs-scrub-0</code> removes it.</td></tr>
+        <tr><th>gs-pin</th><td>Hold the element for one screen of scrolling.</td></tr>
+        <tr><th>gs-pin-300</th><td>Hold it for three screens.</td></tr>
+        <tr><th>gs-end-[bottom_top]</th><td>Where it stops.</td></tr>
+        <tr><th>gs-snap</th><td>Settle on the steps of a timeline or the panels of a row.</td></tr>
+        <tr><th>gs-toggle-[is-seen]</th><td>Add a class of yours while it is in range.</td></tr>
+        <tr><th>gs-markers</th><td>Show where it starts and ends, for debugging.</td></tr>
+        <tr><th>gs-st-[pinSpacing:false]</th><td>Any other ScrollTrigger option.</td></tr>
+      </table>
+
+      <table class="ref">
+        <caption>Sequences</caption>
+        <tr><th>gs-timeline</th><td>Play every animated element inside as one sequence.</td></tr>
+        <tr><th>gs-with</th><td>Start together with the step before.</td></tr>
+        <tr><th>gs-at-[-=0.3]</th><td>A GSAP position: overlap, gap, time or label.</td></tr>
+        <tr><th>gs-label-[intro]</th><td>Name a step so others can use <code>gs-at-[intro]</code>.</td></tr>
+        <tr><th>click:gs-timeline</th><td>A sequence opened by a click instead of the scroll.</td></tr>
+        <tr><th>gs-timeline in gs-timeline</th><td>The inner one is a single step of the outer one.</td></tr>
+      </table>
+
+      <table class="ref">
+        <caption>Ready-made</caption>
+        <tr><th>gs-parallax-20</th><td>Drift against the scroll. Images are zoomed to cover.</td></tr>
+        <tr><th>gs-horizontal</th><td>Pin and slide the first child sideways.</td></tr>
+        <tr><th>gs-frames</th><td>An image sequence on a canvas, from <code>data-gs-frames</code>.</td></tr>
+        <tr><th>gs-marquee</th><td>An endless row. Add <code>-right</code>, <code>-120</code>, <code>-pause</code> or <code>-scroll</code>, or several at once.</td></tr>
+        <tr><th>gs-magnetic gs-tilt</th><td>Lean toward the pointer, or turn in 3D.</td></tr>
+        <tr><th>gs-count</th><td>Count up to the number in the text.</td></tr>
+        <tr><th>gs-odometer</th><td>Roll every digit into place in its own mask.</td></tr>
+        <tr><th>gs-odometer-steps</th><td>Stop and rest on the way, like a loader. <code>gs-odometer-[32,71,100]</code> picks the stops.</td></tr>
+        <tr><th>gs-draw gs-scramble gs-type</th><td>Draw SVG strokes, scramble text, type text.</td></tr>
+        <tr><th>gs-smooth</th><td>Smooth scrolling for the page, on the wrapper around your content.</td></tr>
+        <tr><th>gs-scroll-to</th><td>A link that glides to its <code>#target</code>.</td></tr>
+      </table>
+
+      <table class="ref">
+        <caption>Screen and motion</caption>
+        <tr><th>sm: md: lg: xl: 2xl:</th><td>From that width up. Replaces the plain class.</td></tr>
+        <tr><th>max-md:</th><td>Below that width.</td></tr>
+        <tr><th>min-[900px]: max-[900px]:</th><td>Your own width.</td></tr>
+        <tr><th>motion-safe: motion-reduce:</th><td>By the visitor's motion setting.</td></tr>
+        <tr><th>pointer-fine: pointer-coarse:</th><td>Mouse or touch.</td></tr>
+        <tr><th>gs-off</th><td>No animation on this element.</td></tr>
+        <tr><th>gs-motion-ok</th><td>Keep it even with reduced motion on.</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ javascript ============ -->
+
+<section class="wrap" id="javascript">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2 class="section-title">When you do want JavaScript</h2>
+      <p class="section-note">It is all still GSAP underneath.</p>
+    </div>
+    <div class="block">
+      <div class="block-head">
+        <h3 class="block-title gs-fade-up">Name your own.</h3>
+        <p class="block-text gs-fade-up gs-delay-0.1">Set the defaults once, turn a motion you use everywhere into a class of its own, and reach the real GSAP timeline behind any element when you need to steer it.</p>
+      </div>
+      <pre class="code pane" data-lang="js">
+// Defaults for the whole site
+gs.config({ duration: 1, ease: "expo.out", distance: 60 });
+
+// A class of your own: gs-swoop
+gs.preset("swoop", { from: { autoAlpha: 0, y: 80, rotation: 6 } });
+
+// Anything GSAP can do, as a class: gs-glow (it runs the headline on this page)
+gs.preset("glow", {
+  build(timeline, words) {
+    timeline.from(words, { opacity: 0, duration: 0.45, stagger: 0.045 });
+  },
+});
+
+// The GSAP timeline behind an element
+const [timeline] = gs.get("#hero");
+timeline.timeScale(2);
+
+// Events, on the element itself
+document.addEventListener("gs:complete", (event) =&gt; console.log(event.target));
+      </pre>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-top">
+    <div class="footer-intro">
+      <p>I'm <a class="inline-link" href="https://jroy.in" target="_blank" rel="noreferrer me">Joydeb</a>. On YouTube I'm HankTheTank, and DiMaac is my library of everything I build in the videos. Tweenwind is free and open source.</p>
+    </div>
+    <nav aria-label="Footer" class="footer-links">
+      <div>
+        <span>This library</span>
+        <a class="g" href="https://github.com/Hank-D-Tank/tweenwind" target="_blank" rel="noreferrer">GitHub</a>
+        <a class="g" href="https://www.npmjs.com/package/tweenwind" target="_blank" rel="noreferrer">npm</a>
+        <a class="g" href="llms.txt">For AI assistants</a>
+      </div>
+      <div>
+        <span>DiMaac</span>
+        <a class="g" href="https://learn.dimaac.com/gsap">GSAP course</a>
+        <a class="g" href="https://dimaac.com/projects">Projects</a>
+        <a class="g" href="https://ui.dimaac.com">Components</a>
+      </div>
+      <div>
+        <span>Elsewhere</span>
+        <a class="g" href="https://www.youtube.com/@HankTheTankCoding" target="_blank" rel="noreferrer">YouTube</a>
+        <a class="g" href="https://gsap.com" target="_blank" rel="noreferrer">GSAP</a>
+      </div>
+    </nav>
+  </div>
+  <div class="wrap footer-legal">
+    <span>© 2026 DiMaac · MIT licence</span>
+    <span>GSAP is made by Webflow and has its own free licence</span>
+  </div>
+  <div class="footer-art">
+    <div class="dm-aurora" aria-hidden="true"></div>
+    <div class="dm-wordmark" aria-hidden="true">DiMaac</div>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+</body>
+</html>

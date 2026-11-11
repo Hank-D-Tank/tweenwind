@@ -1,0 +1,16 @@
+node_modules
+dist
+test/react/out
+.DS_Store
+*.log
+*.tgz
+
+# Copied into the docs site by `pnpm build`
+site/tweenwind.min.js
+site/llms.txt
+
+# Scratch space for test agents
+lab
+
+# Screenshots
+shots

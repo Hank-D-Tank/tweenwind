@@ -1,0 +1,360 @@
+/* DiMaac tokens. Every app imports this file, so a colour or a size changes in one place.
+   The look: paper, ink, one grey, a hairline, Inter Tight and JetBrains Mono.
+   Colour only lives in the footer aurora and the hero's word reveal.
+   Two themes: light (below) and dark (further down). @dimaac/theme picks one before paint and
+   sets data-theme on <html>; without JavaScript the system setting picks. */
+
+:root {
+  color-scheme: light;
+
+  --paper: #fafafa;
+  --white: #ffffff;
+  --ink: #0a0a0a;
+  --grey: #6b7280;
+  --grey-strong: #374151;
+  --hairline: #e5e7eb;
+  --hairline-strong: #d1d5db;
+  --placeholder: #9ca3af;
+  --well: #f0f0f0;
+  --course: #cfe3dc;
+  --lime: #ddfc3e;
+  /* The DiMaac mark: ink on paper. The dark theme flips it to the lime of the old dimaac.com */
+  --logo: var(--ink);
+
+  /* Surfaces and states */
+  --surface-hover: #fcfcfc;
+  --surface-sunken: #f1f1f1;
+  --ink-hover: #262626;
+  --glass: rgba(255, 255, 255, 0.92);
+  --glass-strong: rgba(250, 250, 250, 0.94);
+  --focus-ring: rgba(10, 10, 10, 0.06);
+  /* A dark chip over video or photos, the same in both themes */
+  --scrim: rgba(10, 10, 10, 0.72);
+  --on-scrim: #ffffff;
+  /* An edge for bright images on a dark page (none on light) */
+  --media-ring: transparent;
+  /* Bright screenshots are dimmed a touch on the dark page so they don't glare */
+  --media-dim: 1;
+  --selection-bg: rgba(221, 252, 62, 0.6);
+  --selection-fg: #0a0a0a;
+
+  /* Shadows */
+  --shadow-pop: 0 12px 32px -12px rgba(10, 10, 10, 0.12);
+  --shadow-card: 0 18px 40px -16px rgba(10, 10, 10, 0.22), 0 2px 6px rgba(10, 10, 10, 0.04);
+  --shadow-bar: 0 10px 30px -18px rgba(10, 10, 10, 0.25);
+  --shadow-chip: 0 1px 4px rgba(10, 10, 10, 0.18);
+  --shadow-soft: 0 1px 2px rgba(10, 10, 10, 0.04);
+
+  /* Loading skeletons */
+  --skel-a: #efefef;
+  --skel-b: #f7f7f7;
+
+  /* Status: dots and text, then tinted sets for notices and badges */
+  --ok: #16a34a;
+  --warn: #d97706;
+  --bad: #dc2626;
+  --info: #2563eb;
+  --muted: #a3a3a3;
+  --ok-text: #15803d;
+  --warn-text: #b45309;
+  --bad-text: #b91c1c;
+  --ok-line: #bbf7d0;
+  --ok-bg: #f0fdf4;
+  --ok-fg: #14532d;
+  --warn-line: #fde68a;
+  --warn-bg: #fffbeb;
+  --warn-fg: #78350f;
+  --bad-line: #fecaca;
+  --bad-bg: #fef2f2;
+  --bad-fg: #7f1d1d;
+
+  /* Charts */
+  --series: #2a78d6;
+  --series-bar: rgba(42, 120, 214, 0.1);
+  --chart-grid: #eeeeee;
+  --chart-grid-strong: #d4d4d4;
+  --chart-axis: #8a8f98;
+  --chart-cursor: #a3a3a3;
+
+  /* The footer aurora: four hues and how strong each one is */
+  --aurora-teal: 15 118 110;
+  --aurora-mint: 153 246 228;
+  --aurora-violet: 124 58 237;
+  --aurora-pink: 249 168 212;
+  --aurora-a1: 0.55;
+  --aurora-a2: 0.9;
+  --aurora-a3: 0.45;
+  --aurora-a4: 0.55;
+  --aurora-opacity: 0.85;
+
+  /* The giant wordmark in the aurora: ink fading into a lit edge */
+  --wordmark-top: rgba(10, 10, 10, 0.16);
+  --wordmark-mid: rgba(10, 10, 10, 0.06);
+  --wordmark-bottom: rgba(255, 255, 255, 0.35);
+
+  /* next/font sets the first variable; the named family is the fallback for plain HTML apps */
+  --font-sans: var(--font-inter-tight, "Inter Tight"), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
+
+  --container: 1200px;
+  --gutter: clamp(16px, 5vw, 80px);
+  --section-end: clamp(80px, 9vw, 128px);
+  --radius: 6px;
+  --radius-lg: 8px;
+}
+
+/* ---------- dark ----------
+   The same calm near-monochrome look: a soft near-black page, surfaces one step up, no pure
+   white text, the lime mark, the aurora turned down. The block is written twice, once for a
+   picked theme and once for the system setting; keep the two identical. */
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #0b0b0c;
+  --white: #141415;
+  --ink: #ededed;
+  --grey: #8e9098;
+  --grey-strong: #c4c6cc;
+  --hairline: #26272a;
+  --hairline-strong: #3a3b3f;
+  --placeholder: #62656d;
+  --well: #17171a;
+  --course: #16241f;
+  --logo: var(--lime);
+
+  --surface-hover: #1b1b1d;
+  --surface-sunken: #1e1e21;
+  --ink-hover: #d4d4d6;
+  --glass: rgba(20, 20, 21, 0.86);
+  --glass-strong: rgba(11, 11, 12, 0.9);
+  --focus-ring: rgba(255, 255, 255, 0.08);
+  --scrim: rgba(10, 10, 10, 0.72);
+  --on-scrim: #ffffff;
+  --media-ring: rgba(255, 255, 255, 0.06);
+  --media-dim: 0.9;
+  --selection-bg: rgba(221, 252, 62, 0.85);
+  --selection-fg: #0b0b0c;
+
+  --shadow-pop: 0 16px 40px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-card: 0 24px 48px -16px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-bar: 0 14px 34px -18px rgba(0, 0, 0, 0.8);
+  --shadow-chip: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.5);
+
+  --skel-a: #18181a;
+  --skel-b: #222225;
+
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --bad: #f87171;
+  --info: #60a5fa;
+  --muted: #6b6e75;
+  --ok-text: #4ade80;
+  --warn-text: #fbbf24;
+  --bad-text: #f87171;
+  --ok-line: #14532d;
+  --ok-bg: #0d1f14;
+  --ok-fg: #86efac;
+  --warn-line: #4a3a12;
+  --warn-bg: #1f190b;
+  --warn-fg: #fcd34d;
+  --bad-line: #4c1d1f;
+  --bad-bg: #1f1112;
+  --bad-fg: #fca5a5;
+
+  --series: #5b9cf0;
+  --series-bar: rgba(91, 156, 240, 0.16);
+  --chart-grid: #1e1e21;
+  --chart-grid-strong: #2e2f33;
+  --chart-axis: #6f727a;
+  --chart-cursor: #4a4b50;
+
+  --aurora-teal: 20 184 166;
+  --aurora-a1: 0.8;
+  --aurora-a2: 0.38;
+  --aurora-a3: 0.62;
+  --aurora-a4: 0.34;
+  --aurora-opacity: 0.85;
+
+  --wordmark-top: rgba(255, 255, 255, 0.12);
+  --wordmark-mid: rgba(255, 255, 255, 0.04);
+  --wordmark-bottom: rgba(255, 255, 255, 0.22);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --paper: #0b0b0c;
+    --white: #141415;
+    --ink: #ededed;
+    --grey: #8e9098;
+    --grey-strong: #c4c6cc;
+    --hairline: #26272a;
+    --hairline-strong: #3a3b3f;
+    --placeholder: #62656d;
+    --well: #17171a;
+    --course: #16241f;
+    --logo: var(--lime);
+
+    --surface-hover: #1b1b1d;
+    --surface-sunken: #1e1e21;
+    --ink-hover: #d4d4d6;
+    --glass: rgba(20, 20, 21, 0.86);
+    --glass-strong: rgba(11, 11, 12, 0.9);
+    --focus-ring: rgba(255, 255, 255, 0.08);
+    --scrim: rgba(10, 10, 10, 0.72);
+    --on-scrim: #ffffff;
+    --media-ring: rgba(255, 255, 255, 0.06);
+    --media-dim: 0.9;
+    --selection-bg: rgba(221, 252, 62, 0.85);
+    --selection-fg: #0b0b0c;
+
+    --shadow-pop: 0 16px 40px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    --shadow-card: 0 24px 48px -16px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    --shadow-bar: 0 14px 34px -18px rgba(0, 0, 0, 0.8);
+    --shadow-chip: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.5);
+
+    --skel-a: #18181a;
+    --skel-b: #222225;
+
+    --ok: #22c55e;
+    --warn: #f59e0b;
+    --bad: #f87171;
+    --info: #60a5fa;
+    --muted: #6b6e75;
+    --ok-text: #4ade80;
+    --warn-text: #fbbf24;
+    --bad-text: #f87171;
+    --ok-line: #14532d;
+    --ok-bg: #0d1f14;
+    --ok-fg: #86efac;
+    --warn-line: #4a3a12;
+    --warn-bg: #1f190b;
+    --warn-fg: #fcd34d;
+    --bad-line: #4c1d1f;
+    --bad-bg: #1f1112;
+    --bad-fg: #fca5a5;
+
+    --series: #5b9cf0;
+    --series-bar: rgba(91, 156, 240, 0.16);
+    --chart-grid: #1e1e21;
+    --chart-grid-strong: #2e2f33;
+    --chart-axis: #6f727a;
+    --chart-cursor: #4a4b50;
+
+    --aurora-teal: 20 184 166;
+    --aurora-a1: 0.8;
+    --aurora-a2: 0.38;
+    --aurora-a3: 0.62;
+    --aurora-a4: 0.34;
+    --aurora-opacity: 0.85;
+
+    --wordmark-top: rgba(255, 255, 255, 0.12);
+    --wordmark-mid: rgba(255, 255, 255, 0.04);
+    --wordmark-bottom: rgba(255, 255, 255, 0.22);
+  }
+}
+
+/* A dark band inside a light page (data-theme="dark" on any element) gets the lime mark */
+[data-theme="dark"] {
+  --logo: var(--lime);
+}
+
+/* One frame with no transitions while the theme switches, so hover fades don't smear it */
+html[data-theme-switching] *,
+html[data-theme-switching] *::before,
+html[data-theme-switching] *::after {
+  transition: none !important;
+}
+
+/* The theme toggle from @dimaac/theme: a quiet 32 px icon button, like the shell's arrows.
+   Both icons are in the HTML; the theme on <html> shows one, so there is no flash of the wrong one. */
+.dm-theme-toggle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--grey);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  transition: color 0.15s ease;
+}
+.dm-theme-toggle:hover {
+  color: var(--ink);
+}
+.dm-theme-toggle:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 2px;
+}
+.dm-theme-icon {
+  display: block;
+  flex: none;
+}
+.dm-theme-sun {
+  display: none;
+}
+:root[data-theme="dark"] .dm-theme-sun {
+  display: block;
+}
+:root[data-theme="dark"] .dm-theme-moon {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .dm-theme-sun {
+    display: block;
+  }
+  :root:not([data-theme="light"]) .dm-theme-moon {
+    display: none;
+  }
+}
+
+/* The footer aurora: four soft blobs rising from the bottom edge. */
+.dm-aurora {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: -30%;
+  height: 130%;
+  filter: blur(48px);
+  opacity: var(--aurora-opacity);
+  pointer-events: none;
+  background:
+    radial-gradient(40% 60% at 18% 100%, rgb(var(--aurora-teal) / var(--aurora-a1)), rgb(var(--aurora-teal) / 0) 70%),
+    radial-gradient(42% 70% at 42% 100%, rgb(var(--aurora-mint) / var(--aurora-a2)), rgb(var(--aurora-mint) / 0) 70%),
+    radial-gradient(40% 65% at 66% 100%, rgb(var(--aurora-violet) / var(--aurora-a3)), rgb(var(--aurora-violet) / 0) 70%),
+    radial-gradient(30% 50% at 88% 100%, rgb(var(--aurora-pink) / var(--aurora-a4)), rgb(var(--aurora-pink) / 0) 70%);
+}
+
+/* The giant wordmark that sits in the aurora. */
+.dm-wordmark {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.2em;
+  text-align: center;
+  font-size: clamp(120px, 25vw, 380px);
+  font-weight: 500;
+  letter-spacing: -0.07em;
+  line-height: 1;
+  white-space: nowrap;
+  color: transparent;
+  background: linear-gradient(180deg, var(--wordmark-top) 0%, var(--wordmark-mid) 55%, var(--wordmark-bottom) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  pointer-events: none;
+  user-select: none;
+}

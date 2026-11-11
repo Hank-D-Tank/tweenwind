@@ -1,0 +1,88 @@
+{
+  "name": "tweenwind",
+  "version": "0.1.0",
+  "description": "GSAP animations from class names. Scroll reveals, pinned scenes, split text, horizontal scroll and more, without writing JavaScript.",
+  "keywords": [
+    "gsap",
+    "animation",
+    "scroll",
+    "scrolltrigger",
+    "scroll-animation",
+    "class",
+    "utility",
+    "tailwind",
+    "html",
+    "react",
+    "splittext",
+    "parallax",
+    "marquee"
+  ],
+  "homepage": "https://dimaac.com/tween",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hank-D-Tank/tweenwind.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Hank-D-Tank/tweenwind/issues"
+  },
+  "license": "MIT",
+  "author": "Joydeb Roy (https://dimaac.com)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/tweenwind.min.js",
+  "jsdelivr": "./dist/tweenwind.min.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./auto": {
+      "types": "./dist/auto.d.ts",
+      "default": "./dist/auto.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "default": "./dist/react.js"
+    },
+    "./css": "./dist/tweenwind.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "llms.txt"
+  ],
+  "sideEffects": [
+    "./dist/auto.js",
+    "*.css"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "docs": "node scripts/serve.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:browser": "node build.mjs && node test/browser/all.mjs",
+    "prepublishOnly": "node build.mjs && vitest run"
+  },
+  "peerDependencies": {
+    "gsap": ">=3.13.0",
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "esbuild": "0.28.2",
+    "gsap": "3.15.1",
+    "playwright-core": "1.65.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "typescript": "^5.8",
+    "vitest": "5.1.0"
+  }
+}

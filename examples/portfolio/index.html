@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joydeb Roy. Creative developer</title>
+<meta name="description" content="I rebuild award-winning websites and teach how they work, every Sunday on YouTube as HankTheTank.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<!-- Every animation on this page comes from the class names. There is no other JavaScript. -->
+<script src="../../dist/tweenwind.min.js"></script>
+<noscript><style>.loader { display: none; }</style></noscript>
+</head>
+<body>
+
+<!-- Loader: the digits roll to 32, rest, roll to 71, rest, roll to 100. Then it lifts away. -->
+<div class="loader-wrap load:gs-timeline" aria-hidden="true">
+  <div class="loader gs-to-[yPercent:-100] gs-duration-1.1 gs-ease-expo.inOut gs-at-[2.8]">
+    <span class="loader-name gs-split-lines gs-mask gs-slide-up gs-duration-1 gs-ease-expo.out gs-at-[0.15]">Joydeb Roy</span>
+    <span class="loader-count"><span class="gs-odometer-[32,71,100] gs-duration-2.7 gs-at-0">100</span></span>
+  </div>
+</div>
+
+<header class="nav load:gs-fade load:gs-delay-3.7 load:gs-duration-1">
+  <a class="nav-name gs-scroll-to" href="#top">Joydeb Roy</a>
+  <nav class="nav-links" aria-label="Main">
+    <a class="gs-scroll-to" href="#work">Work</a>
+    <a class="gs-scroll-to" href="#archive">Archive</a>
+    <a class="gs-scroll-to" href="#about">About</a>
+    <a class="gs-scroll-to" href="#contact">Contact</a>
+  </nav>
+  <button class="nav-toggle menu-toggle" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+</header>
+
+<!-- Phone menu: one click timeline. The button, the close button and the links all toggle it. -->
+<div id="menu" class="menu click:gs-timeline click:gs-fade click:gs-trigger-[.menu-toggle] click:gs-duration-0.4">
+  <button class="menu-close menu-toggle" type="button">Close</button>
+  <nav class="menu-links" aria-label="Menu">
+    <a class="menu-toggle gs-scroll-to gs-fade-up gs-at-[-=0.2]" href="#work">Work</a>
+    <a class="menu-toggle gs-scroll-to gs-fade-up gs-at-[-=0.3]" href="#archive">Archive</a>
+    <a class="menu-toggle gs-scroll-to gs-fade-up gs-at-[-=0.3]" href="#about">About</a>
+    <a class="menu-toggle gs-scroll-to gs-fade-up gs-at-[-=0.3]" href="#contact">Contact</a>
+  </nav>
+</div>
+
+<div id="smooth-wrapper">
+<div id="smooth-content" class="gs-smooth-1.1">
+<main>
+
+<!-- ============ hero ============ -->
+<section class="hero" id="top">
+  <div class="hero-top">
+    <p class="load:gs-fade-up load:gs-delay-3.9">Creative developer<br>Guwahati, India</p>
+    <p class="hero-lede load:gs-split-lines load:gs-mask load:gs-slide-up load:gs-delay-3.9 load:gs-duration-1 load:gs-ease-expo.out">I rebuild award-winning websites and teach how they work, every Sunday on YouTube as HankTheTank.</p>
+    <a class="hero-cue gs-scroll-to load:gs-fade load:gs-delay-4.6" href="#reel"><span class="gs-float-6">↓</span> Scroll</a>
+  </div>
+  <!-- The name: every letter rises out of its own mask, once the loader has cleared it. -->
+  <h1 class="hero-name load:gs-split-chars load:gs-mask load:gs-slide-up load:gs-delay-3.45 load:gs-duration-1.5 load:gs-ease-expo.out load:gs-stagger-0.06">Joydeb Roy</h1>
+</section>
+
+<!-- A picture that grows to the full width as it scrolls up. -->
+<section class="reel" id="reel">
+  <figure class="reel-frame gs-from-[scale:0.82,borderRadius:28px] gs-ease-none gs-scrub gs-start-[top_bottom] gs-end-[top_12%]">
+    <img class="gs-parallax-8" src="assets/zoom-transition.webp" alt="A grid of colourful video cards from the Zoom transition project" width="1500" height="1125">
+  </figure>
+</section>
+
+<!-- ============ statement ============ -->
+<section class="statement" id="about">
+  <p class="label gs-fade-up">About</p>
+  <p class="statement-text gs-split-words gs-from-[opacity:0.12] gs-ease-none gs-duration-0.4 gs-stagger-0.25 gs-scrub gs-start-[top_78%] gs-end-[bottom_55%]">Every Sunday I pick a website that won an award, rebuild its best idea from scratch, and publish the code with a video that explains every line.</p>
+  <ul class="stats gs-fade-up gs-stagger-0.12">
+    <li><strong><span class="gs-count gs-duration-1.8">40</span>+</strong><span>award-winning ideas rebuilt and open sourced</span></li>
+    <li><strong><span class="gs-count gs-duration-1.8">6.5</span>K</strong><span>developers following along on YouTube</span></li>
+    <li><strong><span class="gs-count gs-duration-1.8">2,600</span></strong><span>hours of the tutorials watched so far</span></li>
+  </ul>
+</section>
+
+<!-- ============ selected work ============ -->
+<section class="work" id="work">
+  <div class="section-head">
+    <h2 class="display gs-split-lines gs-mask gs-slide-up gs-duration-1.1 gs-ease-expo.out">Selected work</h2>
+    <p class="section-note gs-fade-up gs-delay-0.2">Four recent rebuilds. Each one is a live demo, a repo and a video.</p>
+  </div>
+
+  <article class="project">
+    <a class="project-media gs-group gs-reveal-up gs-duration-1.4" href="https://dimaac.com/projects/zoom-transition" target="_blank" rel="noreferrer">
+      <span class="project-zoom group-hover:gs-to-[scale:1.04] group-hover:gs-duration-0.8 group-hover:gs-ease-power3.out">
+        <img class="gs-parallax-8" src="assets/zoom-transition.webp" alt="Zoom transition: a grid of video cards" width="1500" height="1125" loading="lazy">
+      </span>
+    </a>
+    <div class="project-info">
+      <p class="project-index gs-fade-up">01</p>
+      <h3 class="project-title gs-split-lines gs-mask gs-slide-up gs-duration-1 gs-ease-expo.out">Zoom transition</h3>
+      <p class="project-line gs-fade-up gs-delay-0.15">Click a card and its video zooms into a whole new page, with real HTML files and one line of CSS.</p>
+      <p class="project-meta gs-fade-up gs-delay-0.25"><span>View Transitions, GSAP</span><span>2026</span></p>
+    </div>
+  </article>
+
+  <article class="project project-flip">
+    <a class="project-media gs-group gs-reveal-up gs-duration-1.4" href="https://dimaac.com/projects/color-trail" target="_blank" rel="noreferrer">
+      <span class="project-zoom group-hover:gs-to-[scale:1.04] group-hover:gs-duration-0.8 group-hover:gs-ease-power3.out">
+        <img class="gs-parallax-8" src="assets/color-trail.webp" alt="Colour trail: a black and white portrait with a streak of colour" width="1500" height="1125" loading="lazy">
+      </span>
+    </a>
+    <div class="project-info">
+      <p class="project-index gs-fade-up">02</p>
+      <h3 class="project-title gs-split-lines gs-mask gs-slide-up gs-duration-1 gs-ease-expo.out">Colour trail</h3>
+      <p class="project-line gs-fade-up gs-delay-0.15">A black and white photo paints back to colour wherever your cursor goes, with two small WebGL shaders.</p>
+      <p class="project-meta gs-fade-up gs-delay-0.25"><span>WebGL, GLSL</span><span>2026</span></p>
+    </div>
+  </article>
+
+  <article class="project">
+    <a class="project-media gs-group gs-reveal-up gs-duration-1.4" href="https://dimaac.com/projects/mineral-dial" target="_blank" rel="noreferrer">
+      <span class="project-zoom group-hover:gs-to-[scale:1.04] group-hover:gs-duration-0.8 group-hover:gs-ease-power3.out">
+        <img class="gs-parallax-8" src="assets/mineral-dial.webp" alt="Scroll dial: a piece of ore in the middle of a dial of mineral names" width="1500" height="1125" loading="lazy">
+      </span>
+    </a>
+    <div class="project-info">
+      <p class="project-index gs-fade-up">03</p>
+      <h3 class="project-title gs-split-lines gs-mask gs-slide-up gs-duration-1 gs-ease-expo.out">Scroll dial</h3>
+      <p class="project-line gs-fade-up gs-delay-0.15">A scroll-driven dial of minerals, an image sequence drawn on a canvas.</p>
+      <p class="project-meta gs-fade-up gs-delay-0.25"><span>Canvas, ScrollTrigger</span><span>2026</span></p>
+    </div>
+  </article>
+
+  <article class="project project-flip">
+    <a class="project-media gs-group gs-reveal-up gs-duration-1.4" href="https://dimaac.com/projects/butter-scroll" target="_blank" rel="noreferrer">
+      <span class="project-zoom group-hover:gs-to-[scale:1.04] group-hover:gs-duration-0.8 group-hover:gs-ease-power3.out">
+        <img class="gs-parallax-8" src="assets/butter-scroll.webp" alt="Text to timeline: a sentence with small images set between its words" width="1500" height="1125" loading="lazy">
+      </span>
+    </a>
+    <div class="project-info">
+      <p class="project-index gs-fade-up">04</p>
+      <h3 class="project-title gs-split-lines gs-mask gs-slide-up gs-duration-1 gs-ease-expo.out">Text to timeline</h3>
+      <p class="project-line gs-fade-up gs-delay-0.15">Images jump out of the sentence and land on a timeline as you scroll.</p>
+      <p class="project-meta gs-fade-up gs-delay-0.25"><span>GSAP, ScrollTrigger</span><span>2026</span></p>
+    </div>
+  </article>
+</section>
+
+<!-- ============ marquee ============ -->
+<div class="band" aria-hidden="true">
+  <div class="band-row gs-marquee gs-marquee-70 gs-marquee-scroll">
+    <span>Rebuilt in public</span><span class="band-dot"></span><span>Every Sunday</span><span class="band-dot"></span><span>Code included</span><span class="band-dot"></span>
+  </div>
+</div>
+
+<!-- ============ archive: sideways ============ -->
+<section class="archive gs-horizontal" id="archive" aria-label="Archive">
+  <div class="archive-track">
+    <div class="archive-intro">
+      <h2 class="display gs-split-lines gs-mask gs-slide-up gs-duration-1.1 gs-ease-expo.out">The archive</h2>
+      <p class="section-note gs-fade-up gs-delay-0.2">More builds from the last year. Keep scrolling, it goes sideways.</p>
+    </div>
+    <a class="tile gs-group" href="https://dimaac.com/projects/cylinder-gallery" target="_blank" rel="noreferrer">
+      <span class="tile-media gs-reveal-up gs-duration-1.2"><img class="group-hover:gs-to-[scale:1.06] group-hover:gs-duration-0.7" src="assets/cylinder-gallery.webp" alt="" width="960" height="720" loading="lazy"></span>
+      <span class="tile-text gs-fade-up gs-delay-0.2"><span>3D card ring</span><span>Canvas</span></span>
+    </a>
+    <a class="tile tile-low gs-group" href="https://dimaac.com/projects/canvas-gallery" target="_blank" rel="noreferrer">
+      <span class="tile-media gs-reveal-up gs-duration-1.2"><img class="group-hover:gs-to-[scale:1.06] group-hover:gs-duration-0.7" src="assets/canvas-gallery.webp" alt="" width="960" height="720" loading="lazy"></span>
+      <span class="tile-text gs-fade-up gs-delay-0.2"><span>Draggable gallery</span><span>GSAP</span></span>
+    </a>
+    <a class="tile gs-group" href="https://dimaac.com/projects/form-cards" target="_blank" rel="noreferrer">
+      <span class="tile-media gs-reveal-up gs-duration-1.2"><img class="group-hover:gs-to-[scale:1.06] group-hover:gs-duration-0.7" src="assets/form-cards.webp" alt="" width="960" height="720" loading="lazy"></span>
+      <span class="tile-text gs-fade-up gs-delay-0.2"><span>Cards that open</span><span>CSS Grid</span></span>
+    </a>
+    <a class="tile tile-low gs-group" href="https://dimaac.com/projects/game-lanyard" target="_blank" rel="noreferrer">
+      <span class="tile-media gs-reveal-up gs-duration-1.2"><img class="group-hover:gs-to-[scale:1.06] group-hover:gs-duration-0.7" src="assets/game-lanyard.webp" alt="" width="960" height="720" loading="lazy"></span>
+      <span class="tile-text gs-fade-up gs-delay-0.2"><span>Game lanyards</span><span>Physics</span></span>
+    </a>
+    <a class="tile gs-group" href="https://dimaac.com/projects/wobble-scroll" target="_blank" rel="noreferrer">
+      <span class="tile-media gs-reveal-up gs-duration-1.2"><img class="group-hover:gs-to-[scale:1.06] group-hover:gs-duration-0.7" src="assets/wobble-scroll.webp" alt="" width="960" height="720" loading="lazy"></span>
+      <span class="tile-text gs-fade-up gs-delay-0.2"><span>Jelly spiral scroll</span><span>Three.js</span></span>
+    </a>
+    <a class="tile tile-low gs-group" href="https://dimaac.com/projects/mouse-trail" target="_blank" rel="noreferrer">
+      <span class="tile-media gs-reveal-up gs-duration-1.2"><img class="group-hover:gs-to-[scale:1.06] group-hover:gs-duration-0.7" src="assets/mouse-trail.webp" alt="" width="960" height="720" loading="lazy"></span>
+      <span class="tile-text gs-fade-up gs-delay-0.2"><span>Image mouse trail</span><span>GSAP</span></span>
+    </a>
+    <a class="tile gs-group" href="https://dimaac.com/projects/book" target="_blank" rel="noreferrer">
+      <span class="tile-media gs-reveal-up gs-duration-1.2"><img class="group-hover:gs-to-[scale:1.06] group-hover:gs-duration-0.7" src="assets/book.webp" alt="" width="960" height="720" loading="lazy"></span>
+      <span class="tile-text gs-fade-up gs-delay-0.2"><span>Flip book</span><span>3D CSS</span></span>
+    </a>
+    <a class="tile tile-low gs-group" href="https://dimaac.com/projects/pixel-canvas" target="_blank" rel="noreferrer">
+      <span class="tile-media gs-reveal-up gs-duration-1.2"><img class="group-hover:gs-to-[scale:1.06] group-hover:gs-duration-0.7" src="assets/pixel-canvas.webp" alt="" width="960" height="720" loading="lazy"></span>
+      <span class="tile-text gs-fade-up gs-delay-0.2"><span>Pixel hover</span><span>Canvas</span></span>
+    </a>
+    <a class="archive-more gs-fade-up" href="https://dimaac.com/projects" target="_blank" rel="noreferrer">
+      <span class="display">All builds</span>
+      <span class="archive-arrow gs-magnetic-0.4">↗</span>
+    </a>
+  </div>
+</section>
+
+<!-- ============ how a build happens: a pinned scene ============ -->
+<section class="process gs-timeline gs-pin-220 gs-scrub gs-ease-none" aria-label="How a build happens">
+  <div class="process-inner">
+    <div class="process-head">
+      <p class="label">Process</p>
+      <h2 class="display">How a build happens</h2>
+      <div class="process-bar"><i class="gs-from-[scaleX:0] gs-ease-none gs-scrub-true gs-trigger-[.process] gs-start-[top_top] gs-end-[+=220%]"></i></div>
+    </div>
+    <ol class="steps">
+      <li class="step">
+        <span class="step-no gs-fade gs-at-0">01</span>
+        <h3 class="gs-split-lines gs-mask gs-slide-up gs-at-0">Pick</h3>
+        <p class="gs-fade-up gs-at-[-=0.5]">I look for one idea on an award-winning site that makes people ask how it was done.</p>
+      </li>
+      <li class="step">
+        <span class="step-no gs-fade">02</span>
+        <h3 class="gs-split-lines gs-mask gs-slide-up gs-with">Rebuild</h3>
+        <p class="gs-fade-up gs-at-[-=0.5]">I write it again from an empty file, as simply as it can be written, until it feels the same.</p>
+      </li>
+      <li class="step">
+        <span class="step-no gs-fade">03</span>
+        <h3 class="gs-split-lines gs-mask gs-slide-up gs-with">Teach</h3>
+        <p class="gs-fade-up gs-at-[-=0.5]">The code goes on GitHub, the demo goes on DiMaac, and a video walks through every line.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ contact ============ -->
+<footer class="contact" id="contact">
+  <p class="label gs-fade-up">Contact</p>
+  <h2 class="contact-title gs-split-chars gs-mask gs-slide-up gs-duration-1.1 gs-ease-expo.out gs-stagger-0.025">Let’s build it</h2>
+  <div class="contact-row">
+    <a class="contact-mail gs-magnetic gs-fade-up press:gs-to-[scale:0.96]" href="mailto:hello@dimaac.com">hello@dimaac.com</a>
+    <ul class="contact-links gs-fade-up gs-stagger-0.08">
+      <li><a href="https://www.youtube.com/@HankTheTankCoding" target="_blank" rel="noreferrer">YouTube</a></li>
+      <li><a href="https://github.com/Hank-D-Tank" target="_blank" rel="noreferrer">GitHub</a></li>
+      <li><a href="https://dimaac.com" target="_blank" rel="noreferrer">DiMaac</a></li>
+    </ul>
+  </div>
+  <div class="contact-foot">
+    <span>© 2026 Joydeb Roy</span>
+    <span>No JavaScript was written for this page. Only class names.</span>
+    <a class="gs-scroll-to" href="#top">Back to top ↑</a>
+  </div>
+  <div class="contact-glow gs-from-[yPercent:30,opacity:0] gs-scrub gs-start-[top_bottom] gs-end-[bottom_bottom]" aria-hidden="true"></div>
+</footer>
+
+</main>
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,222 @@
+# Tweenwind
+
+> A library that turns class names into GSAP animations. No JavaScript is written by the page
+> author. Package: `tweenwind`. Peer dependency: `gsap` 3.13 or newer. Made by DiMaac.
+
+Use this file when writing HTML or JSX for a project that has `tweenwind` installed.
+
+## Setup
+
+Script tag (in `<head>`, no `defer`; it loads GSAP itself):
+
+    <script src="https://cdn.jsdelivr.net/npm/tweenwind"></script>
+
+Bundler:
+
+    import "tweenwind/auto";
+    import "tweenwind/css";
+
+React / Next.js (render once, for example in the root layout; classes then work in any component):
+
+    import { Gs } from "tweenwind/react";
+    import "tweenwind/css";
+    <Gs />
+
+## Grammar
+
+    [prefix:]gs-name[-value]
+
+- A value is a plain word or number, or anything in `[brackets]`.
+- No spaces inside a class. Write `_` for a space: `gs-start-[top_80%]`.
+- Bracket objects are GSAP vars: `gs-from-[y:50,opacity:0,duration:1.2,ease:expo.out]`.
+- Negative numbers: `gs-from-x--100` or `gs-from-x-[-100]`.
+- Times are seconds. `500ms` and bare numbers of 100 or more are read as milliseconds.
+- The same words work in `data-gs="..."` without the `gs-` prefix.
+- Classes on one element add up into one animation per trigger.
+
+## Default behaviour
+
+With no trigger prefix, an animation plays once when the element scrolls into view
+(start `top 88%`). Elements already on screen play on load.
+
+## Reveals (start hidden or moved, end as the CSS has them)
+
+gs-fade, gs-fade-up, gs-fade-down, gs-fade-left, gs-fade-right, gs-slide-up, gs-slide-down,
+gs-slide-left, gs-slide-right, gs-zoom-in, gs-zoom-out, gs-pop, gs-flip-up, gs-flip-down,
+gs-flip-left, gs-flip-right, gs-blur-in, gs-rotate-in, gs-reveal-up, gs-reveal-down,
+gs-reveal-left, gs-reveal-right.
+
+An optional number changes the amount: `gs-fade-up-80` (px), `gs-zoom-in-0.5` (start scale),
+`gs-blur-in-20` (px), `gs-rotate-in-15` (degrees).
+
+Direction is the direction of travel: `gs-fade-up` moves up into place, `gs-fade-left` moves left.
+
+## Loops
+
+gs-float, gs-spin, gs-pulse, gs-wiggle. They pause while off screen. Next to a reveal on the
+same element (`gs-fade-up gs-float`) the reveal plays once, then the loop starts.
+
+## Custom values
+
+- `gs-from-[...]` animates from these values to the natural state.
+- `gs-to-[...]` animates from the natural state to these values.
+- Both together make a from-to. A property on only one side tweens to or from natural.
+- Short form: `gs-from-y-50 gs-from-opacity-0 gs-to-scale-1.2`.
+- `blur:12` is shorthand for a blur filter.
+
+## Timing
+
+gs-duration-N, gs-delay-N, gs-ease-NAME (`gs-ease-power3.out`, `gs-ease-[back.out(1.7)]`,
+`gs-ease-[0.7,0,0.3,1]`), gs-repeat-N, gs-repeat (forever), gs-yoyo, gs-repeat-delay-N.
+
+## Targets
+
+- `gs-stagger-0.1` on a parent animates its children, 0.1s apart. Each child waits until it is on
+  screen, so grids animate row by row. `gs-stagger` alone uses a fade-up. A child that has its
+  own animation classes keeps them and is skipped by the parent.
+- `gs-stagger-center|end|edges|random` sets where the stagger starts. From `center` or `edges` the
+  whole wave keeps its length (as GSAP does), so neighbours are twice the stated gap apart.
+- `gs-children` animates the children with the default gap.
+- `gs-target-[.selector]` animates matching descendants.
+- `gs-split-chars`, `gs-split-words`, `gs-split-lines` split the text and animate the pieces.
+  `gs-mask` clips each piece, with a little room so descenders and tight line heights are not
+  cut. Classic line reveal: `gs-split-lines gs-mask gs-slide-up`.
+
+## Triggers (prefixes)
+
+- `load:` plays when the page is ready.
+- `hover:`, `press:`, `focus:` play on the moment and reverse when it ends.
+- `click:` toggles: forward on the first click, back on the next.
+- `group-hover:` (also `group-click:` etc.) listens to the nearest ancestor with `gs-group`.
+- `gs-trigger-[#id]` makes another element the trigger. With `click:`, that element is the
+  button, and its `aria-expanded` attribute is kept in sync if it has one. A selector may match
+  several elements (an open button, a close button, the links inside a menu) and elements that
+  are added to the page later.
+- `click:gs-outside` closes a click animation when the visitor clicks anywhere else. Escape closes
+  it too, and also closes any click animation whose trigger has `aria-expanded`.
+- A hover, press, focus or click animation waits until a one-time reveal on the same element has
+  finished. Do not add delays to work around that.
+
+Each prefix is its own animation, so one element can have several:
+
+    <a class="gs-fade-up hover:gs-to-[y:-4] press:gs-to-[scale:0.96]">
+
+Timing classes follow their prefix: `hover:gs-duration-0.2`, `load:gs-duration-2`. A plain
+`gs-duration-2` next to `load:gs-fade-up` does nothing (the console says so on localhost).
+
+A reveal behind `hover:` or `group-hover:` is the resting state: `group-hover:gs-fade-up` on a
+caption shows it while the `gs-group` card is hovered and hides it again afterwards.
+
+## Scroll
+
+- `gs-scrub` ties progress to the scrollbar, from entering the screen to leaving it. The move is
+  linear (as if `gs-ease-none`) unless an ease class is added. Steps of a scrubbed `gs-timeline`
+  keep their own eases.
+  `gs-scrub-1` sets smoothing in seconds. `gs-scrub-0` means none.
+- `gs-pin` pins the element for one screen of scrolling. `gs-pin-300` for three. `gs-pin-[+=1500]`.
+- `gs-start-[top_70%]`, `gs-end-[bottom_top]`: ScrollTrigger positions. One word means the
+  viewport position: `gs-start-center`.
+- `gs-replay` plays again every time it is scrolled down to (it resets once the element is back
+  below the screen); `gs-reverse` reverses when scrolled back above.
+- `gs-snap`, `gs-markers`, `gs-toggle-[class-name]`, `gs-st-[anyScrollTriggerOption:value]`.
+- A scrolling container (`overflow: auto` on a div) is detected automatically. To set it by hand:
+  `gs-st-[scroller:#shell]`.
+
+## Timelines
+
+`gs-timeline` on a container makes every animated descendant a step, played in DOM order,
+one after another. The container holds the trigger classes.
+
+    <section class="gs-timeline gs-pin-300 gs-scrub">
+      <h2 class="gs-fade-up">One</h2>
+      <h2 class="gs-fade-up">Two</h2>
+      <p class="gs-fade-up gs-with">Together with Two</p>
+      <img class="gs-zoom-in gs-at-[-=0.2]">
+    </section>
+
+- `gs-with` starts with the previous step. `gs-at-[...]` is a GSAP position parameter.
+- `gs-label-[name]` names a step. `gs-duration` and `gs-ease` on the container are defaults for
+  the steps.
+- `click:gs-timeline click:gs-trigger-[#button]` makes a click-driven sequence (menus, dialogs).
+  If the script cannot run, such a menu stays closed. For a full-screen overlay menu add
+  `.menu:not([data-gs-ready]) { visibility: hidden }` to your CSS, so it is closed even when the
+  script file itself never arrives (the hide rules come with the script).
+- A `gs-timeline` inside a `gs-timeline` is one step of the outer one.
+- A step with scroll classes of its own (`gs-scrub`, `gs-start-*`, `gs-end-*`, `gs-pin`,
+  `gs-trigger-*`, `gs-replay`, `gs-reverse`, `gs-toggle-*`) is not a step. It runs by itself.
+
+## Ready-made
+
+- `gs-parallax` / `gs-parallax-20`: drift against the scroll. On `img`, `video`, `canvas` it also
+  scales to cover; put the image in a wrapper with `overflow: hidden`.
+- `gs-horizontal`: on a section; pins it and slides its first child sideways by its overflow.
+  Animated elements inside trigger on the sideways movement. Add `gs-snap` to stop on panels.
+- `gs-frames`: on a `canvas` (or any element) with `data-gs-frames="/img/frame-[001-120].webp"`.
+  Scrubbed by default. Use it as a step in a pinned timeline for a held sequence.
+- `gs-marquee`: endless row of the element's children. `gs-marquee-right`, `gs-marquee-120`
+  (px per second), `gs-marquee-pause` (pause on hover), `gs-marquee-scroll` (reacts to scroll).
+  They combine in one class too: `gs-marquee-right-120`, `gs-marquee-pause-scroll`.
+- `gs-magnetic`, `gs-magnetic-0.5`; `gs-tilt`, `gs-tilt-15`.
+- `gs-count`: counts up to the number in the element's text. `gs-count-100` starts from 100.
+  Tags around the number stay: `<p class="gs-count">Over <b>1,200</b> clients</p>`.
+- `gs-odometer`: the same number, but every digit rolls in its own mask like a mileage counter.
+  `gs-odometer-90` starts from 90. Works with `gs-duration`, `gs-ease`, `gs-scrub` and as a
+  timeline step. On its own it is one calm roll, good for stats.
+- `gs-odometer-steps` (four stops, `gs-odometer-steps-3` for three) or `gs-odometer-[32,71,100]`
+  (your own stops) makes the wheels move to a number, rest, and move on, one digit at a time.
+  This is the page loader: `<span class="load:gs-odometer-[32,71,100]">100</span>`. Each stop
+  takes 0.9s unless `gs-duration` sets the total.
+- `gs-draw` (SVG strokes), `gs-scramble`, `gs-type`.
+- `gs-smooth`: smooth scrolling; put it on the single wrapper around the page content.
+- `gs-scroll-to`: on a link with `href="#id"`.
+
+## Responsive and reduced motion
+
+- `sm: md: lg: xl: 2xl:` apply from 640, 768, 1024, 1280, 1536px. `max-md:` applies below.
+  `min-[900px]:`, `max-[900px]:` for other widths.
+- A prefixed class overrides the plain one: `gs-fade-up md:gs-fade-left`,
+  `gs-duration-0.5 lg:gs-duration-1`.
+- `gs-off` disables an element: `max-md:gs-off`.
+- Reduced motion is handled automatically. `motion-reduce:gs-fade` gives a calmer alternative,
+  `gs-motion-ok` keeps an animation regardless.
+
+## What the library already handles (do not work around these)
+
+- Elements inside `display: none` (tab panels, closed dialogs, phone-only blocks) are set up when
+  they are shown, and animate then.
+- A reveal plays once per element. It does not replay on resize, `gs.refresh()` or list changes.
+  Remove and re-add the class (in separate frames) or the element to play it again.
+- Finished one-time reveals and timelines leave no inline styles. Only `data-gs-ready` stays.
+- Right-to-left pages, pins inside transformed ancestors and `html { scroll-behavior: smooth }`.
+- Keyboard: `press:` reacts to Enter and Space, `click:` on a non-button becomes focusable.
+- A reveal that has not played yet is see-through, not `visibility: hidden`: the Tab key and screen
+  readers still reach it, and focusing it scrolls it into view, which plays it. A closed `click:`
+  menu is the opposite: it and its steps are hidden for real until it opens.
+
+## JavaScript API (optional)
+
+    import gs from "tweenwind";
+    gs.config({ duration: 1, ease: "expo.out", distance: 60, start: "top 80%" });
+    gs.preset("swoop", { from: { autoAlpha: 0, y: 80, rotation: 6 } }); // adds gs-swoop
+    gs.preset("glow", { build(timeline, targets, timing) { /* any GSAP */ } });
+    gs.start(); gs.scan(rootOrSelector); gs.refresh(); gs.revert(rootOrSelector);
+    // gs.revert(el) leaves that element alone until gs.scan(el). gs.revert() takes everything off.
+    gs.get(elementOrSelector); // GSAP timelines made for that element
+    gs.use({ ScrollTrigger }); // reuse plugins you already imported
+
+Events on the element (they bubble): `gs:start`, `gs:complete`.
+
+## Common mistakes
+
+- Do not write GSAP code for things a class can do, and do not register plugins by hand.
+- Do not put spaces inside brackets. Use `_`.
+- For masked line reveals use `gs-split-lines gs-mask gs-slide-up`, not `gs-fade-up`.
+- Put `gs-stagger` on the parent, not on each child.
+- Inside `gs-timeline`, give steps no scroll classes; the container has them. A step with its
+  own scroll classes leaves the sequence and runs by itself.
+- With `gs-smooth`, a `position: fixed` header must sit outside the smooth wrapper.
+- An element cannot share `gs-parallax`, `gs-horizontal` or `gs-frames` with another animation
+  in the same trigger. Use a wrapper.
+- `gs-pin` does not work inside a `gs-horizontal` section.
+- Use `autoAlpha` instead of `opacity` in custom values when the element should also be
+  unclickable while hidden.
