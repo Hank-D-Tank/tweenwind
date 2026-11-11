@@ -346,14 +346,14 @@ loads it from jsDelivr. GSAP is made by Webflow and is free under its own
 
 ## Working on it
 
-The library lives in the DiMaac repo, in `packages/tweenwind`.
-
 ```bash
-pnpm install
-pnpm --filter tweenwind build          # dist/ and the docs site's copy
-pnpm --filter tweenwind test           # the parser
-pnpm --filter tweenwind test:browser   # everything else, in a real browser
-pnpm --filter tweenwind docs           # the docs site on http://localhost:5262
+git clone https://github.com/Hank-D-Tank/tweenwind.git
+cd tweenwind
+npm install
+npm run build          # dist/ and the docs site's copy
+npm test               # the parser
+npm run test:browser   # everything else, in a real browser (uses the Chrome on your machine)
+npm run docs           # the docs site on http://localhost:5262
 ```
 
 ## Licence
