@@ -24,9 +24,6 @@ By [DiMaac](https://dimaac.com). Free, MIT licensed.
 <script src="https://cdn.jsdelivr.net/npm/tweenwind"></script>
 ```
 
-> The npm package is on its way. Until it is out, use this script tag instead; it does the same job:
-> `<script src="https://dimaac.com/tween/tweenwind.min.js"></script>`
-
 If the page already loads GSAP, put that script tag first and this one uses it instead of
 fetching its own.
 
