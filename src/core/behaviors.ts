@@ -234,6 +234,63 @@ const tilt: Behavior = (env, entry, options, reduce) => {
   });
 };
 
+/**
+ * The element slides against the pointer while the pointer is over it, as if you looked around
+ * it, and drifts back to rest when the pointer leaves. Where the pointer sits is counted across
+ * the part of the element the window shows, so a wall wider than the window still pans all the way.
+ */
+const pan: Behavior = (env, entry, options, reduce) => {
+  if (reduce) return;
+  const { gsap } = env;
+  const el = entry.el;
+  const duration = number(options.duration, 1);
+  const inline = TRANSFORM_PROPS.map((name) => el.style.getPropertyValue(name));
+  let xTo: any = null;
+  let yTo: any = null;
+  entry.run(() => {
+    if (options.x !== undefined) xTo = gsap.quickTo(el, "x", { duration, ease: "power3.out" });
+    if (options.y !== undefined) yTo = gsap.quickTo(el, "y", { duration, ease: "power3.out" });
+  });
+  const pixels = (amount: number | string, size: number) => {
+    if (typeof amount === "number") return amount;
+    const value = parseFloat(amount);
+    if (amount.endsWith("vw")) return (value * window.innerWidth) / 100;
+    if (amount.endsWith("vh")) return (value * window.innerHeight) / 100;
+    if (amount.endsWith("%")) return (value * size) / 100;
+    return value;
+  };
+  const share = (point: number, start: number, end: number) => (end > start ? Math.min(1, Math.max(0, (point - start) / (end - start))) : 0.5);
+  const rest = () => {
+    if (xTo) xTo(0);
+    if (yTo) yTo(0);
+  };
+  // The pointer is checked against where the element rests, not where it has slid to: an element
+  // that moves away from the pointer would otherwise lose it at its edge and spring back and forth.
+  listen(entry, window, "pointermove", (event: PointerEvent) => {
+    if (event.pointerType === "touch") return;
+    const box = el.getBoundingClientRect();
+    const x = Number(gsap.getProperty(el, "x")) || 0;
+    const y = Number(gsap.getProperty(el, "y")) || 0;
+    const home = { left: box.left - x, right: box.right - x, top: box.top - y, bottom: box.bottom - y };
+    if (event.clientX < home.left || event.clientX > home.right || event.clientY < home.top || event.clientY > home.bottom) return rest();
+    // Counted across the part of it inside the window.
+    const left = Math.max(home.left, 0);
+    const right = Math.min(home.right, window.innerWidth);
+    const top = Math.max(home.top, 0);
+    const bottom = Math.min(home.bottom, window.innerHeight);
+    if (xTo) xTo((0.5 - share(event.clientX, left, right)) * 2 * pixels(options.x, box.width));
+    if (yTo) yTo((0.5 - share(event.clientY, top, bottom)) * 2 * pixels(options.y, box.height));
+  });
+  listen(entry, document.documentElement, "pointerleave", rest);
+  entry.cleanups.push(() => {
+    gsap.killTweensOf(el, "x,y");
+    if (!(el as any)._gsap) return;
+    gsap.set(el, { clearProps: "transform" });
+    TRANSFORM_PROPS.forEach((name, index) => (inline[index] ? el.style.setProperty(name, inline[index]) : el.style.removeProperty(name)));
+    if (el.getAttribute("style") === "") el.removeAttribute("style");
+  });
+};
+
 /** Smooth scrolling for the page, with the element as the scrolling content. */
 const smooth: Behavior = (env, entry, options, reduce) => {
   const Smoother = env.plugins.ScrollSmoother;
@@ -340,5 +397,6 @@ export const BEHAVIORS: Array<[string, Behavior]> = [
   ["marquee", marquee],
   ["magnetic", magnetic],
   ["tilt", tilt],
+  ["pan", pan],
   ["scrollTo", scrollTo],
 ];

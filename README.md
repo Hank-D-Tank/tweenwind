@@ -188,6 +188,9 @@ itself. To name the box yourself: `gs-st-[scroller:#shell]`.
 A `gs-timeline` inside another one is a single step of it. A step that has scroll classes of its
 own (`gs-scrub`, `gs-start-...`, `gs-pin`, `gs-trigger-...`) keeps them and runs by itself.
 
+`gs-repeat` on the container loops the whole sequence, and `gs-repeat-delay-2` waits between
+rounds: `load:gs-timeline load:gs-repeat load:gs-repeat-delay-2` plays from page load, forever.
+
 ### Ready-made
 
 | Class | What it does |
@@ -197,6 +200,7 @@ own (`gs-scrub`, `gs-start-...`, `gs-pin`, `gs-trigger-...`) keeps them and runs
 | `gs-frames` | An image sequence on a canvas: `data-gs-frames="/img/f-[001-120].webp"` |
 | `gs-marquee` | An endless row. Add `-right`, `-120` (px a second), `-pause` or `-scroll`, or several: `gs-marquee-right-120` |
 | `gs-magnetic` `gs-tilt` | Lean toward the pointer, or turn in 3D |
+| `gs-pan` | Slide against the pointer while it is over the element, like looking around a wall of photos, and drift back when it leaves. 30px each way, or your own: `gs-pan-80`, `gs-pan-x-15vw`, `gs-pan-y-5%`, `gs-pan-[x:15vw,y:20,duration:1.4]`. A minus sign follows the pointer instead |
 | `gs-count` | Count up to the number in the text. Keeps its commas, decimals, units and the tags around it |
 | `gs-odometer` | Roll every digit into place in its own mask, like a mileage counter. `gs-odometer-90` starts at 90 |
 | `gs-odometer-steps` | The same wheels, but they stop and rest on the way: the loader you see on portfolio sites. `gs-odometer-[32,71,100]` picks the stops yourself |
@@ -322,6 +326,8 @@ gs.use({ ScrollTrigger });
   scrolls away with the content.
 - `gs-pin` on its own holds the element for one screen. Add `gs-scrub` to drive an animation
   while it is held.
+- `gs-pan` moves the element with `x` and `y`. If it needs a resting offset of its own, give it
+  a margin or put the offset on a parent, not on its `transform`.
 - Letters split with `gs-split-chars` have kerning switched off, so they do not shift when the
   split is undone at the end.
 - A finished one-time timeline (`gs-timeline` without `gs-scrub`) is tidied away like a reveal.

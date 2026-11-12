@@ -1,6 +1,6 @@
 {
   "name": "tweenwind",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "GSAP animations from class names. Scroll reveals, pinned scenes, split text, horizontal scroll and more, without writing JavaScript.",
   "keywords": [
     "gsap",

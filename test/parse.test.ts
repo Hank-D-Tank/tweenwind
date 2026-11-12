@@ -253,6 +253,19 @@ describe("effects and behaviours", () => {
     expect(parse("gs-marquee--80").behaviors.marquee).toEqual({ speed: -80 });
     expect(parse("gs-marquee-scroll").plugins).toContain("ScrollTrigger");
   });
+  it("reads a pan: amount, axis, units and the bracket form", () => {
+    expect(parse("gs-pan").behaviors.pan).toEqual({ x: 30, y: 30 });
+    expect(parse("gs-pan-80").behaviors.pan).toEqual({ x: 80, y: 80 });
+    expect(parse("gs-pan-x-15vw").behaviors.pan).toEqual({ x: "15vw" });
+    expect(parse("gs-pan-y--40").behaviors.pan).toEqual({ y: -40 });
+    expect(parse("gs-pan-x-10% gs-pan-y-20").behaviors.pan).toEqual({ x: "10%", y: 20 });
+    expect(parse("gs-pan-[x:15vw,y:2vh,duration:1.4]").behaviors.pan).toEqual({ x: "15vw", y: "2vh", duration: 1.4 });
+  });
+  it("reports a pan it cannot read", () => {
+    expect(parse("gs-pan-x-wide").unknown).toEqual(["gs-pan-x-wide"]);
+    expect(parse("gs-pan-15em").unknown).toEqual(["gs-pan-15em"]);
+    expect(parse("gs-pan-[x:15vw,speed:2]").unknown).toEqual(["gs-pan-[x:15vw,speed:2]"]);
+  });
   it("reports a marquee option it does not know, instead of ignoring it", () => {
     const spec = parse("gs-marquee-right-fast");
     expect(spec.unknown).toEqual(["gs-marquee-right-fast"]);

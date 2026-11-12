@@ -142,6 +142,9 @@ one after another. The container holds the trigger classes.
   `.menu:not([data-gs-ready]) { visibility: hidden }` to your CSS, so it is closed even when the
   script file itself never arrives (the hide rules come with the script).
 - A `gs-timeline` inside a `gs-timeline` is one step of the outer one.
+- `gs-repeat` on the container loops the whole sequence; `gs-repeat-delay-N` waits between rounds.
+  `load:gs-timeline load:gs-repeat` plays from page load, forever. A `load:` animation inside
+  a `load:gs-timeline` (for example a one-time `load:gs-fade`) is not a step; it runs by itself.
 - A step with scroll classes of its own (`gs-scrub`, `gs-start-*`, `gs-end-*`, `gs-pin`,
   `gs-trigger-*`, `gs-replay`, `gs-reverse`, `gs-toggle-*`) is not a step. It runs by itself.
 
@@ -157,6 +160,13 @@ one after another. The container holds the trigger classes.
   (px per second), `gs-marquee-pause` (pause on hover), `gs-marquee-scroll` (reacts to scroll).
   They combine in one class too: `gs-marquee-right-120`, `gs-marquee-pause-scroll`.
 - `gs-magnetic`, `gs-magnetic-0.5`; `gs-tilt`, `gs-tilt-15`.
+- `gs-pan`: the element slides against the pointer while the pointer is over it (where it rests),
+  and drifts back when it leaves. 30px each way by default; `gs-pan-80`, `gs-pan-x-15vw`,
+  `gs-pan-y-5%` (of the element), `gs-pan-[x:15vw,y:20,duration:1.4]`. A negative amount follows
+  the pointer. The position counts across the part of the element inside the window, so a strip
+  wider than the window (`width: 130vw; margin-left: -15vw`) pans its full amount. Keep the
+  element's own resting offset off `transform` (use a margin or a parent), as the pan owns x and y.
+  Off for touch and reduced motion.
 - `gs-count`: counts up to the number in the element's text. `gs-count-100` starts from 100.
   Tags around the number stay: `<p class="gs-count">Over <b>1,200</b> clients</p>`.
 - `gs-odometer`: the same number, but every digit rolls in its own mask like a mileage counter.

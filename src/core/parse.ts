@@ -34,6 +34,10 @@ function number(value: Value): number | undefined {
   return Number.isNaN(parsed) ? undefined : parsed;
 }
 
+/** A distance for `pan`: px as a plain number, or a number with px, vw, vh or % (of the element). */
+const isLength = (value: unknown): boolean =>
+  (typeof value === "number" && !Number.isNaN(value)) || (typeof value === "string" && /^-?(?:\d+\.?\d*|\.\d+)(?:px|vw|vh|%)$/.test(value));
+
 function need(spec: Spec, ...plugins: string[]) {
   for (const plugin of plugins) if (!spec.plugins.includes(plugin)) spec.plugins.push(plugin);
 }
@@ -259,6 +263,29 @@ export const UTILITIES: Record<string, Handler> = {
   tilt: behavior("tilt", (value, current) => {
     const degrees = number(value);
     if (degrees !== undefined) current.max = degrees;
+  }),
+  // `pan` (30px both ways), `pan-80`, `pan-x-15vw`, `pan-y--40`, or `pan-[x:15vw,y:20,duration:1.4]`.
+  pan: behavior("pan", (value, current) => {
+    if (value.raw === null) {
+      current.x = current.y = 30;
+      return;
+    }
+    if (value.bracket) {
+      const vars = parseObject(value.raw);
+      for (const key of Object.keys(vars)) {
+        if (key === "x" || key === "y") {
+          if (!isLength(vars[key])) return false;
+          current[key] = vars[key];
+        } else if (key === "duration" && typeof vars[key] === "number") current.duration = vars[key];
+        else return false;
+      }
+      return;
+    }
+    const match = /^(?:([xy])-)?(.+)$/.exec(value.raw)!;
+    const amount = parseAny(match[2]);
+    if (!isLength(amount)) return false;
+    if (match[1]) current[match[1]] = amount;
+    else current.x = current.y = amount;
   }),
   smooth: (_group, value, spec) => {
     const amount = number(value);

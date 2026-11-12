@@ -117,6 +117,79 @@ test("tilt turns toward the pointer", async (page) => {
   near(got.rx, 0, 1.5, "level top to bottom at mid height");
 });
 
+test("pan slides against the pointer on one axis and drifts back when it leaves", async (page) => {
+  await open(page, `<div id="a" class="gs-pan-x-100" style="height:300px;background:#ccc"></div><div style="height:400px"></div>`);
+  const box = await page.evaluate(() => {
+    const r = $("#a").getBoundingClientRect();
+    return { left: r.left, right: r.right };
+  });
+  const width = box.right - box.left;
+  await page.mouse.move(box.left + width / 2, 150);
+  await page.mouse.move(box.left + 1, 150, { steps: 3 });
+  const left = await page.evaluate(async () => {
+    await finish();
+    return { x: num("#a", "x"), y: num("#a", "y") };
+  });
+  near(left.x, 100, 1, "pointer at the left edge: the element sits the full amount to the right");
+  near(left.y, 0, 0.01, "x only");
+  await page.mouse.move(box.right - 1, 150, { steps: 3 });
+  const right = await page.evaluate(async () => {
+    await finish();
+    return num("#a", "x");
+  });
+  near(right, -100, 1, "pointer at the right edge: the full amount to the left, though the element has slid away under it");
+  await page.mouse.move(box.left + width / 2, 500, { steps: 3 });
+  const rest = await page.evaluate(async () => {
+    await finish();
+    return num("#a", "x");
+  });
+  near(rest, 0, 0.5, "pointer gone: back to rest");
+});
+
+test("pan counts the part of a wide element that is on screen, in vw, and both axes by default", async (page) => {
+  await open(page, `<div style="overflow:hidden"><div id="wide" class="gs-pan-x-10vw" style="width:130vw;margin-left:-15vw;height:300px;background:#ccc"></div></div><div id="b" class="gs-pan" style="width:400px;height:200px;margin:50px;background:#999"></div>`);
+  const view = await page.evaluate(() => ({ width: innerWidth }));
+  await page.mouse.move(view.width / 2, 150);
+  await page.mouse.move(1, 150, { steps: 3 });
+  const wide = await page.evaluate(async () => {
+    await finish();
+    return num("#wide", "x");
+  });
+  near(wide, view.width * 0.1, 1.5, "left edge of the window, not of the element: the full 10vw");
+  const box = await page.evaluate(() => {
+    const r = $("#b").getBoundingClientRect();
+    return { left: r.left, top: r.top, width: r.width, height: r.height };
+  });
+  await page.mouse.move(box.left + box.width / 2, box.top + box.height / 2);
+  await page.mouse.move(box.left + box.width - 1, box.top + 1, { steps: 3 });
+  const corner = await page.evaluate(async () => {
+    await finish();
+    return { x: num("#b", "x"), y: num("#b", "y") };
+  });
+  near(corner.x, -30, 1, "plain gs-pan: 30px each way, x");
+  near(corner.y, 30, 1, "and y, against the pointer");
+});
+
+test("pan stays still for touch and with reduced motion", async (page) => {
+  await open(page, `<div id="a" class="gs-pan-x-100" style="height:300px;background:#ccc"></div>`);
+  const touched = await page.evaluate(async () => {
+    const el = $("#a");
+    el.dispatchEvent(new PointerEvent("pointermove", { bubbles: true, clientX: 0, clientY: 100, pointerType: "touch" }));
+    await finish();
+    return num("#a", "x");
+  });
+  near(touched, 0, 0.01, "a finger does not pan");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await open(page, `<div id="a" class="gs-pan-x-100" style="height:300px;background:#ccc"></div>`);
+  await page.mouse.move(400, 150);
+  await page.mouse.move(1, 150, { steps: 3 });
+  const reduced = await page.evaluate(async () => {
+    await finish();
+    return num("#a", "x");
+  });
+  near(reduced, 0, 0.01, "reduced motion: no pan");
+});
+
 test("parallax drifts with the scroll and covers its frame", async (page) => {
   const img = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect width='40' height='40' fill='teal'/%3E%3C/svg%3E`;
   await open(page, `<div class="screen"></div><div id="frame" style="width:400px;height:300px;overflow:hidden"><img id="a" class="gs-parallax-20 gs-scrub-true" src="${img}" style="width:100%;height:100%;display:block"></div><div id="b" class="box gs-parallax--10 gs-scrub-true"></div><div class="spacer"></div>`);
